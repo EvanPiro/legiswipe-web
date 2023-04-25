@@ -215,7 +215,7 @@ view model =
                 div [] [ text "Loading bill..." ]
 
             Just bill ->
-                div [ class "mt-1" ]
+                div [ class "mt-1 mx-1" ]
                     [ yesNo bill
                     , Bill.view bill
                     ]
