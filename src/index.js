@@ -11,6 +11,10 @@ const apiKey = process.env.ELM_APP_API_KEY;
 const rawData = localStorage.getItem(key);
 const flags = { maybeModel: rawData ? JSON.parse(rawData) : null, apiKey };
 
+console.log(process.env);
+
+console.log("flags: ", flags);
+
 const app = Elm.Main.init({
   node: document.getElementById("root"),
   flags,
