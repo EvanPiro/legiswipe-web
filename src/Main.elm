@@ -212,7 +212,7 @@ view model =
     div [ class "full-frame" ]
         [ case model.activeBill of
             Nothing ->
-                div [] [ text "Loading bill..." ]
+                div [ class "mt-1 mx-1 text-center" ] [ text "Loading bill..." ]
 
             Just bill ->
                 div [ class "mt-1 mx-1" ]
