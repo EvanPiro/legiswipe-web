@@ -209,7 +209,7 @@ stats model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "full-frame" ]
+    div [ class "full-frame p-1" ]
         [ case model.activeBill of
             Nothing ->
                 div [] [ text "Loading bill..." ]
