@@ -50,3 +50,18 @@ img {
 .p-1 {
   padding: 1rem;
 }
+
+.fixed-bottom {
+  position: fixed;
+  bottom:0%;
+}
+.text-right {
+  text-align: right;
+}
+
+.full-frame {
+  display: flex;
+  min-height: 95vh;
+  flex-direction: column;
+  justify-content: space-between;
+}

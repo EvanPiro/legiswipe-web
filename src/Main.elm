@@ -209,9 +209,8 @@ stats model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "p-1" ]
-        [ div [] [ text model.feedback ]
-        , case model.activeBill of
+    div [ class "full-frame p-1" ]
+        [ case model.activeBill of
             Nothing ->
                 div [] [ text "Loading bill..." ]
 
@@ -220,6 +219,10 @@ view model =
                     [ yesNo bill
                     , Bill.view bill
                     ]
+        , div [ class "flex" ]
+            [ div [] [ a [ href "https://github.com/EvanPiro/legiswipe.com" ] [ text "Source Code" ] ]
+            , div [] [ text "© Evan Piro 2023" ]
+            ]
         ]
 
 
