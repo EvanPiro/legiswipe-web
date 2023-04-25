@@ -1,15 +1,17 @@
 port module Main exposing (Model, Msg(..), init, main, update, view)
 
-import Api
 import Bill exposing (Bill, BillRes)
 import BillMetadata exposing (BillMetadata, BillMetadataRes)
 import Browser
+import CongressApi
 import Html exposing (Html, a, button, div, h1, img, p, text)
 import Html.Attributes exposing (class, href, src)
 import Html.Events exposing (onClick)
 import Http as Http exposing (Error(..))
 import Json.Decode as Decoder exposing (Decoder)
+import Json.Encode as Encode
 import List exposing (head)
+import LogApi
 
 
 port cache : Model -> Cmd msg
@@ -53,7 +55,7 @@ init { apiKey, maybeModel } =
               , feedback = ""
               }
             , Http.get
-                { url = Api.url apiKey
+                { url = CongressApi.url apiKey
                 , expect = Http.expectJson GotBills BillMetadata.decoder
                 }
             )
@@ -65,8 +67,25 @@ init { apiKey, maybeModel } =
 getNextBills : String -> String -> Cmd Msg
 getNextBills key url =
     Http.get
-        { url = Api.addKey key url
+        { url = CongressApi.addKey key url
         , expect = Http.expectJson GotBills BillMetadata.decoder
+        }
+
+
+encodeVerdict : Verdict -> Encode.Value
+encodeVerdict ( bill, bool ) =
+    Encode.object
+        [ ( "verdict", Encode.bool bool )
+        , ( "bill", Bill.encode bill )
+        ]
+
+
+logVerdict : Verdict -> Cmd Msg
+logVerdict verdict =
+    Http.post
+        { url = LogApi.path
+        , body = Http.jsonBody <| encodeVerdict verdict
+        , expect = Http.expectWhatever LogRes
         }
 
 
@@ -78,12 +97,13 @@ type Msg
     = GotBills (Result Http.Error BillMetadataRes)
     | GotBill (Result Http.Error BillRes)
     | SetVerdict Bill Bool
+    | LogRes (Result Http.Error ())
 
 
 getBill : String -> BillMetadata -> Cmd Msg
 getBill key { url } =
     Http.get
-        { url = Api.addKey key url
+        { url = CongressApi.addKey key url
         , expect = Http.expectJson GotBill Bill.decoder
         }
 
@@ -91,6 +111,9 @@ getBill key { url } =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        LogRes res ->
+            ( model, Cmd.none )
+
         GotBills res ->
             let
                 bills =
@@ -140,6 +163,9 @@ update msg model =
 
         SetVerdict bill bool ->
             let
+                verdict =
+                    ( bill, bool )
+
                 newBills =
                     List.filter (\{ number } -> bill.number /= number) model.bills
 
@@ -156,11 +182,11 @@ update msg model =
                         | bills = newBills
                         , activeBill = Nothing
                         , loading = True
-                        , verdicts = [ ( bill, bool ) ] ++ model.verdicts
+                        , verdicts = [ verdict ] ++ model.verdicts
                     }
             in
             ( newModel
-            , Cmd.batch [ cache newModel, reqCmd ]
+            , Cmd.batch [ cache newModel, reqCmd, logVerdict verdict ]
             )
 
 

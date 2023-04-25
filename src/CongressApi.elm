@@ -1,4 +1,4 @@
-module Api exposing (addKey, url)
+module CongressApi exposing (addKey, url)
 
 
 url : String -> String

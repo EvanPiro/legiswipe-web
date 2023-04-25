@@ -1,12 +1,18 @@
-module Bill exposing (Bill, BillRes, Sponsor, decoder, toUrl, view)
+module Bill exposing (Bill, BillRes, Sponsor, decoder, encode, toUrl, view)
 
 import Html exposing (Html, a, div, h1, h2, h3, h4, p, span, text)
 import Html.Attributes exposing (class, href, target)
 import Json.Decode exposing (Decoder, field, int, list, map, map2, map3, map4, map5, map6, map7, maybe, string)
+import Json.Encode as Encode exposing (encode, object)
 
 
 type alias PolicyArea =
     { name : String }
+
+
+encodePolicyArea : PolicyArea -> Encode.Value
+encodePolicyArea { name } =
+    Encode.object [ ( "name", Encode.string name ) ]
 
 
 type alias Request =
@@ -56,6 +62,28 @@ type alias Bill =
     , type_ : String
     , congress : Int
     }
+
+
+encode : Bill -> Encode.Value
+encode bill =
+    Encode.object
+        [ ( "introducedDate", Encode.string bill.introducedDate )
+        , ( "sponsors", Encode.list encodeSponsor bill.sponsors )
+        , ( "title", Encode.string bill.title )
+        , ( "number", Encode.string bill.number )
+        , ( "type", Encode.string bill.type_ )
+        , ( "congress", Encode.int bill.congress )
+        ]
+
+
+encodeSponsor : Sponsor -> Encode.Value
+encodeSponsor { firstName, lastName, party, fullName } =
+    Encode.object
+        [ ( "firstName", Encode.string firstName )
+        , ( "lastName", Encode.string lastName )
+        , ( "party", Encode.string party )
+        , ( "fullName", Encode.string fullName )
+        ]
 
 
 billDecoder : Decoder Bill
