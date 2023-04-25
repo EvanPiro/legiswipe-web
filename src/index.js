@@ -9,7 +9,7 @@ const key = "data";
 const apiKey = process.env.ELM_APP_API_KEY;
 
 const rawData = localStorage.getItem(key);
-const flags = { maybeModel: rawData && JSON.parse(rawData), apiKey };
+const flags = { maybeModel: rawData ? JSON.parse(rawData) : null, apiKey };
 
 console.log(process.env);
 
