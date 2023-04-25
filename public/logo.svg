@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+   viewBox="0 0 323.141 322.95" enable-background="new 0 0 323.141 322.95" xml:space="preserve">
+<g>
+
+  <rect
+    fill="#AA1133"
+    x="192.99"
+    y="107.392"
+    transform="matrix(0.7071 0.7071 -0.7071 0.7071 186.4727 -127.2386)"
+    width="107.676"
+    height="108.167"/>
+  <rect
+    fill="#0011AA"
+    x="100.99"
+    y="107.392"
+    transform="matrix(0.7071 0.7071 -0.7071 0.7071 186.4727 -127.2386)"
+    width="107.676"
+    height="108.167"/>
+  <rect
+    fill="#FFDDFF"
+    x="143.99"
+    y="212.392"
+    transform="matrix(0.7071 0.7071 -0.7071 0.7071 186.4727 -127.2386)"
+    width="107.676"
+    height="108.167"/>
+  <rect
+          fill="#CC20"
+          x="203.99"
+          y="212.392"
+          transform="matrix(0.7071 0.7071 -0.7071 0.7071 186.4727 -127.2386)"
+          width="107.676"
+          height="108.167"/>
+  <rect
+          fill="#BB0022"
+          x="193.99"
+          y="150.392"
+          transform="matrix(0.7071 0.7071 -0.7071 0.7071 186.4727 -127.2386)"
+          width="107.676"
+          height="108.167"/>
+</g>
+</svg>
