@@ -12,8 +12,9 @@
   "author": "emanegux",
   "license": "ISC",
   "dependencies": {
+    "@netlify/functions": "^1.4.0",
+    "create-elm-app": "^5.22.0",
     "dotenv": "^16.0.3",
-    "prettier": "^2.8.8",
-    "create-elm-app": "^5.22.0"
+    "prettier": "^2.8.8"
   }
 }
