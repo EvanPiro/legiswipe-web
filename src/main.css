@@ -48,7 +48,7 @@ img {
 }
 
 .p-1 {
-  padding: 1rem;
+  /*padding: 1rem;*/
 }
 
 .fixed-bottom {
@@ -61,7 +61,7 @@ img {
 
 .full-frame {
   display: flex;
-  min-height: 80vh;
+  min-height: 100vh;
   flex-direction: column;
   justify-content: space-between;
 }
