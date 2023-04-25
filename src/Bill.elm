@@ -145,8 +145,13 @@ toUrl bill =
         ( "SRES", 118 ) ->
             "https://www.congress.gov/bill/118th-congress/senate-resolution/" ++ bill.number
 
+        -- House bill
         ( "HR", 118 ) ->
             "https://www.congress.gov/bill/118th-congress/house-bill/" ++ bill.number
+
+        -- House resolution
+        ( "HRES", 118 ) ->
+            "https://www.congress.gov/bill/118th-congress/house-resolution/" ++ bill.number
 
         ( a, b ) ->
             "bill type: " ++ a ++ "; congress: " ++ String.fromInt bill.congress ++ "; " ++ "number: " ++ bill.number
