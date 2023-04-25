@@ -183,7 +183,7 @@ stats model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "mt-1" ]
+    div [ class "p-1" ]
         [ div [] [ text model.feedback ]
         , case model.activeBill of
             Nothing ->
