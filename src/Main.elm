@@ -221,7 +221,7 @@ view model =
                     ]
         , div [ class "flex" ]
             [ div [] [ a [ href "https://github.com/EvanPiro/legiswipe.com" ] [ text "Source Code" ] ]
-            , div [] [ text "© Evan Piro 2023" ]
+            , div [] [ a [ href "https://evanpiro.com" ] [ text "© Evan Piro 2023" ] ]
             ]
         ]
 

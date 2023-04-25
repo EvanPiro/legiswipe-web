@@ -137,7 +137,7 @@ toUrl bill =
         ( "S", 118 ) ->
             "https://www.congress.gov/bill/118th-congress/senate-bill/" ++ bill.number
 
-        -- House Joint Resolution
+        -- House joint resolution
         ( "HJRES", 118 ) ->
             "https://www.congress.gov/bill/118th-congress/house-joint-resolution/" ++ bill.number
 
