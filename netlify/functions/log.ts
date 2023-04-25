@@ -8,8 +8,7 @@ const handler: Handler = async (
     return {
       statusCode: 405,
     };
-  console.log("request made");
-  console.log(event.body);
+  console.log(event);
 
   return {
     statusCode: 200,
