@@ -36,6 +36,7 @@ type alias Model =
     , next : String
     , apiKey : String
     , feedback : String
+    , showSponsor : Bool
     }
 
 
@@ -56,6 +57,7 @@ init { apiKey, maybeModel } =
               , next = ""
               , apiKey = apiKey
               , feedback = ""
+              , showSponsor = False
               }
             , Http.get
                 { url = CongressApi.url apiKey
@@ -110,6 +112,7 @@ type Msg
     | SetVerdict Bill Bool
     | LogRes (Result Http.Error ())
     | ClearCache
+    | ShowSponsor
 
 
 getBill : String -> BillMetadata -> Cmd Msg
@@ -123,6 +126,9 @@ getBill key { url } =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ShowSponsor ->
+            ( { model | showSponsor = True }, Cmd.none )
+
         ClearCache ->
             ( model, Cmd.batch [ getFirstBills model, clearCache "" ] )
 
@@ -172,7 +178,7 @@ update msg model =
                 Ok ok ->
                     let
                         newModel =
-                            { model | activeBill = Just ok.bill }
+                            { model | activeBill = Just ok.bill, showSponsor = False }
                     in
                     ( newModel, cache newModel )
 
@@ -235,7 +241,7 @@ view model =
             Just bill ->
                 div [ class "mt-1 mx-1" ]
                     [ yesNo bill
-                    , Bill.view bill
+                    , Bill.view ShowSponsor model.showSponsor bill
                     ]
         , div [ class "flex" ]
             [ div [] [ a [ href "https://github.com/EvanPiro/legiswipe.com" ] [ text "Source Code" ] ]
