@@ -14,6 +14,11 @@ import List exposing (head)
 import LogApi
 
 
+modelVersion : String
+modelVersion =
+    "v1"
+
+
 port cache : Model -> Cmd msg
 
 
@@ -37,6 +42,7 @@ type alias Model =
     , apiKey : String
     , feedback : String
     , showSponsor : Bool
+    , modelVersion : String
     }
 
 
@@ -58,6 +64,7 @@ init { apiKey, maybeModel } =
               , apiKey = apiKey
               , feedback = ""
               , showSponsor = False
+              , modelVersion = modelVersion
               }
             , Http.get
                 { url = CongressApi.url apiKey
