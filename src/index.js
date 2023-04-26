@@ -20,4 +20,8 @@ app.ports.cache.subscribe(function (model) {
   localStorage.setItem(key, JSON.stringify(model));
 });
 
+app.ports.clearCache.subscribe(function (model) {
+  localStorage.clear();
+});
+
 serviceWorker.unregister();

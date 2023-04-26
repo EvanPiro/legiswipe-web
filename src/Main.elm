@@ -17,6 +17,9 @@ import LogApi
 port cache : Model -> Cmd msg
 
 
+port clearCache : String -> Cmd msg
+
+
 
 ---- MODEL ----
 
@@ -64,6 +67,14 @@ init { apiKey, maybeModel } =
             ( model, Cmd.none )
 
 
+getFirstBills : Model -> Cmd Msg
+getFirstBills model =
+    Http.get
+        { url = CongressApi.url model.apiKey
+        , expect = Http.expectJson GotBills BillMetadata.decoder
+        }
+
+
 getNextBills : String -> String -> Cmd Msg
 getNextBills key url =
     Http.get
@@ -98,6 +109,7 @@ type Msg
     | GotBill (Result Http.Error BillRes)
     | SetVerdict Bill Bool
     | LogRes (Result Http.Error ())
+    | ClearCache
 
 
 getBill : String -> BillMetadata -> Cmd Msg
@@ -111,6 +123,9 @@ getBill key { url } =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        ClearCache ->
+            ( model, Cmd.batch [ getFirstBills model, clearCache "" ] )
+
         LogRes res ->
             ( model, Cmd.none )
 
@@ -212,7 +227,10 @@ view model =
     div [ class "full-frame" ]
         [ case model.activeBill of
             Nothing ->
-                div [ class "mt-1 mx-1 text-center" ] [ text "Loading bill..." ]
+                div [ class "mt-1 mx-1 text-center" ]
+                    [ text "Loading bill..."
+                    , div [ class "mt-1" ] [ button [ onClick ClearCache ] [ text "Reset" ] ]
+                    ]
 
             Just bill ->
                 div [ class "mt-1 mx-1" ]
