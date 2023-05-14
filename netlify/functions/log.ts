@@ -25,11 +25,15 @@ const handler: Handler = async (
     return {
       statusCode: 405,
     };
+
+  const timestamp = `${new Date().getTime().toString()}-${
+    event.headers["x-nf-request-id"]
+  }`;
   const command = new PutItemCommand({
     TableName: tableName,
     Item: marshall({
       user,
-      timestamp: new Date().getTime().toString(),
+      timestamp,
       ...event,
       ...JSON.parse(event.body),
     }),
