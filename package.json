@@ -12,6 +12,8 @@
   "author": "emanegux",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.332.0",
+    "@aws-sdk/util-dynamodb": "^3.332.0",
     "@netlify/functions": "^1.4.0",
     "create-elm-app": "^5.22.0",
     "dotenv": "^16.0.3",
