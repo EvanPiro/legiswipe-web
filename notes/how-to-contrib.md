@@ -30,6 +30,11 @@ Remove all files from stage.
 git reset .
 ```
 
+Switch branch to main
+```bash
+git checkout main
+```
+
 Get rid of all unstaged file changes:
 ```bash
 git checkout .
