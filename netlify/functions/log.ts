@@ -25,6 +25,7 @@ const handler: Handler = async (
     return {
       statusCode: 405,
     };
+  event.headers;
 
   const timestamp = `${new Date().getTime().toString()}-${
     event.headers["x-nf-request-id"]

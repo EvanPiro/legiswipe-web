@@ -14,15 +14,10 @@ import List exposing (head)
 import LogApi
 
 
-modelVersion : String
-modelVersion =
-    "v1"
+port signIn : String -> Cmd msg
 
 
-port cache : Model -> Cmd msg
-
-
-port clearCache : String -> Cmd msg
+port signInSuccess : (String -> msg) -> Sub msg
 
 
 
@@ -33,53 +28,52 @@ type alias Verdict =
     ( Bill, Bool )
 
 
+type Auth
+    = SignedOut
+    | SignedIn String
+    | SigningIn
+
+
 type alias Model =
     { activeBill : Maybe Bill
     , bills : List BillMetadata
     , verdicts : List Verdict
     , loading : Bool
     , next : String
-    , apiKey : String
+    , env : Env
     , feedback : String
     , showSponsor : Bool
-    , modelVersion : String
+    , auth : Auth
     }
 
 
-type alias Flags =
-    { apiKey : String
-    , maybeModel : Maybe Model
-    }
+type alias Env =
+    { apiKey : String, googleClientId : String }
 
 
-init : Flags -> ( Model, Cmd Msg )
-init { apiKey, maybeModel } =
-    case maybeModel of
-        Nothing ->
-            ( { activeBill = Nothing
-              , bills = []
-              , verdicts = []
-              , loading = True
-              , next = ""
-              , apiKey = apiKey
-              , feedback = ""
-              , showSponsor = False
-              , modelVersion = modelVersion
-              }
-            , Http.get
-                { url = CongressApi.url apiKey
-                , expect = Http.expectJson GotBills BillMetadata.decoder
-                }
-            )
-
-        Just model ->
-            ( model, Cmd.none )
+init : Env -> ( Model, Cmd Msg )
+init env =
+    ( { activeBill = Nothing
+      , bills = []
+      , verdicts = []
+      , loading = True
+      , next = ""
+      , env = env
+      , feedback = ""
+      , showSponsor = False
+      , auth = SignedOut
+      }
+    , Http.get
+        { url = CongressApi.url env.apiKey
+        , expect = Http.expectJson GotBills BillMetadata.decoder
+        }
+    )
 
 
 getFirstBills : Model -> Cmd Msg
 getFirstBills model =
     Http.get
-        { url = CongressApi.url model.apiKey
+        { url = CongressApi.url model.env.apiKey
         , expect = Http.expectJson GotBills BillMetadata.decoder
         }
 
@@ -120,6 +114,8 @@ type Msg
     | LogRes (Result Http.Error ())
     | ClearCache
     | ShowSponsor
+    | SignIn
+    | SignInSuccess String
 
 
 getBill : String -> BillMetadata -> Cmd Msg
@@ -133,11 +129,17 @@ getBill key { url } =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        SignIn ->
+            ( { model | auth = SigningIn }, signIn model.env.googleClientId )
+
+        SignInSuccess token ->
+            ( { model | auth = SignedIn token }, Cmd.none )
+
         ShowSponsor ->
             ( { model | showSponsor = True }, Cmd.none )
 
         ClearCache ->
-            ( model, Cmd.batch [ getFirstBills model, clearCache "" ] )
+            ( model, getFirstBills model )
 
         LogRes res ->
             ( model, Cmd.none )
@@ -158,7 +160,7 @@ update msg model =
                 reqCmd =
                     case List.head bills of
                         Just bill ->
-                            getBill model.apiKey bill
+                            getBill model.env.apiKey bill
 
                         _ ->
                             Cmd.none
@@ -166,7 +168,7 @@ update msg model =
                 newModel =
                     { model | bills = bills, next = next }
             in
-            ( newModel, Cmd.batch [ cache newModel, reqCmd ] )
+            ( newModel, Cmd.batch [ reqCmd ] )
 
         GotBill res ->
             case res of
@@ -187,7 +189,7 @@ update msg model =
                         newModel =
                             { model | activeBill = Just ok.bill, showSponsor = False }
                     in
-                    ( newModel, cache newModel )
+                    ( newModel, Cmd.none )
 
         SetVerdict bill bool ->
             let
@@ -200,10 +202,10 @@ update msg model =
                 reqCmd =
                     case List.head newBills of
                         Just billMetadata ->
-                            getBill model.apiKey billMetadata
+                            getBill model.env.apiKey billMetadata
 
                         _ ->
-                            getNextBills model.apiKey model.next
+                            getNextBills model.env.apiKey model.next
 
                 newModel =
                     { model
@@ -214,7 +216,7 @@ update msg model =
                     }
             in
             ( newModel
-            , Cmd.batch [ cache newModel, reqCmd, logVerdict verdict ]
+            , Cmd.batch [ reqCmd, logVerdict verdict ]
             )
 
 
@@ -249,12 +251,26 @@ view model =
                 div [ class "mt-1 mx-1" ]
                     [ yesNo bill
                     , Bill.view ShowSponsor model.showSponsor bill
+                    , logInButton model
                     ]
         , div [ class "flex" ]
             [ div [] [ a [ href "https://github.com/EvanPiro/legiswipe.com" ] [ text "Source Code" ] ]
             , div [] [ a [ href "https://evanpiro.com" ] [ text "© Evan Piro 2023" ] ]
             ]
         ]
+
+
+logInButton : Model -> Html Msg
+logInButton model =
+    case model.auth of
+        SignedOut ->
+            div [ class "mt-2" ] [ button [ onClick SignIn ] [ text "Log in" ] ]
+
+        SignedIn _ ->
+            div [] []
+
+        SigningIn ->
+            div [] [ text "signing in" ]
 
 
 yesNo : Bill -> Html Msg
@@ -269,11 +285,11 @@ yesNo bill =
 ---- PROGRAM ----
 
 
-main : Program Flags Model Msg
+main : Program Env Model Msg
 main =
     Browser.element
         { view = view
         , init = init
         , update = update
-        , subscriptions = always Sub.none
+        , subscriptions = always <| signInSuccess SignInSuccess
         }
