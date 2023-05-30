@@ -261,7 +261,7 @@ yesNo : Bill -> Html Msg
 yesNo bill =
     div [ class "flex" ]
         [ button [ class "btn", onClick <| SetVerdict bill False ] [ text "❌" ]
-        , button [ class "btn", onClick <| SetVerdict bill True ] [ text "✅" ]
+        , button [ class "btn shadow", onClick <| SetVerdict bill True ] [ text "✅" ]
         ]
 
 
