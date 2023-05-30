@@ -34,6 +34,16 @@ type Auth
     | SigningIn
 
 
+authToMaybe : Auth -> Maybe String
+authToMaybe auth =
+    case auth of
+        SignedIn cred ->
+            Just cred
+
+        _ ->
+            Nothing
+
+
 type alias Model =
     { activeBill : Maybe Bill
     , bills : List BillMetadata
@@ -86,19 +96,20 @@ getNextBills key url =
         }
 
 
-encodeVerdict : Verdict -> Encode.Value
-encodeVerdict ( bill, bool ) =
+encodeVerdict : String -> Verdict -> Encode.Value
+encodeVerdict creds ( bill, bool ) =
     Encode.object
         [ ( "verdict", Encode.bool bool )
         , ( "bill", Bill.encode bill )
+        , ( "credential", Encode.string creds )
         ]
 
 
-logVerdict : Verdict -> Cmd Msg
-logVerdict verdict =
+logVerdict : String -> Verdict -> Cmd Msg
+logVerdict creds verdict =
     Http.post
         { url = LogApi.path
-        , body = Http.jsonBody <| encodeVerdict verdict
+        , body = Http.jsonBody <| encodeVerdict creds verdict
         , expect = Http.expectWhatever LogRes
         }
 
@@ -216,7 +227,15 @@ update msg model =
                     }
             in
             ( newModel
-            , Cmd.batch [ reqCmd, logVerdict verdict ]
+            , Cmd.batch
+                [ reqCmd
+                , logVerdict
+                    (model.auth
+                        |> authToMaybe
+                        |> Maybe.withDefault ""
+                    )
+                    verdict
+                ]
             )
 
 

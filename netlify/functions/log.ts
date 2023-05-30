@@ -2,6 +2,7 @@ import { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import * as dotenv from "dotenv";
+import * as gal from "google-auth-library";
 
 dotenv.config();
 
@@ -25,18 +26,27 @@ const handler: Handler = async (
     return {
       statusCode: 405,
     };
-  event.headers;
 
   const timestamp = `${new Date().getTime().toString()}-${
     event.headers["x-nf-request-id"]
   }`;
+
+  const data = JSON.parse(event.body);
+
+  const authClient = new gal.OAuth2Client();
+
+  const verifyRes = await authClient.verifyIdToken({
+    idToken: data.credential,
+    audience: process.env.ELM_APP_GOOGLE_CLIENT_ID,
+  });
+
   const command = new PutItemCommand({
     TableName: tableName,
     Item: marshall({
       user,
       timestamp,
       ...event,
-      ...JSON.parse(event.body),
+      ...data,
     }),
   });
 
