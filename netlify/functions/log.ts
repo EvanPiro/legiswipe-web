@@ -40,6 +40,8 @@ const handler: Handler = async (
     audience: process.env.ELM_APP_GOOGLE_CLIENT_ID,
   });
 
+  console.log(verifyRes);
+
   const command = new PutItemCommand({
     TableName: tableName,
     Item: marshall({

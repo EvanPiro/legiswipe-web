@@ -13,10 +13,13 @@ const app = Elm.Main.init({
   },
 });
 
-app.ports.signIn.subscribe(async function (googleClientId) {
-  const { credential } = await google.accounts.id.initialize({
+app.ports.signIn.subscribe(function (googleClientId) {
+  console.log("log on clicked");
+  console.log(googleClientId);
+  google.accounts.id.initialize({
     client_id: googleClientId,
     callback: function (obj) {
+      console.log(obj);
       app.ports.signInSuccess.send(obj.credential);
     },
   });
