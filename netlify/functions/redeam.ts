@@ -10,7 +10,7 @@ const handler: Handler = async (
   const data = {
     quantity: 610,
     address: event.queryStringParameters.address,
-    timestamp: event.queryStringParameters.timestamp,
+    from: event.queryStringParameters.from,
   };
 
   console.log(data);
