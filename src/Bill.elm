@@ -1,8 +1,8 @@
 module Bill exposing (Bill, BillRes, Sponsor, decoder, encode, toUrl, view)
 
-import Html exposing (Html, a, button, div, h1, h2, h3, h4, p, span, text)
-import Html.Attributes exposing (class, href, target)
-import Html.Events exposing (onClick)
+import Html.Styled exposing (Html, a, button, div, h1, h2, h3, h4, p, span, text)
+import Html.Styled.Attributes exposing (class, href, target)
+import Html.Styled.Events exposing (onClick)
 import Json.Decode exposing (Decoder, field, int, list, map, map2, map3, map4, map5, map6, map7, maybe, string)
 import Json.Encode as Encode exposing (encode, object)
 
