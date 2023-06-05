@@ -1,16 +1,15 @@
 module Main exposing (Model, Msg(..), init, main, update, view)
 
-import Bill exposing (Bill, BillRes)
+import Bill as Bill
 import BillMetadata exposing (BillMetadata, BillMetadataRes)
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
 import CongressApi
-import Html.Styled exposing (Html, a, button, div, h1, img, p, text, toUnstyled)
-import Html.Styled.Attributes exposing (class, href, src)
+import Html.Styled exposing (Html, a, button, div, text, toUnstyled)
+import Html.Styled.Attributes exposing (class, href)
 import Html.Styled.Events exposing (onClick)
 import Http as Http exposing (Error(..))
 import Json.Encode as Encode
-import List exposing (head)
 import LogApi
 import Url
 
@@ -19,12 +18,24 @@ import Url
 ---- MODEL ----
 
 
+type Page
+    = Home
+    | Bill
+
+
 type alias Verdict =
-    ( Bill, Bool )
+    ( Bill.Model, Bool )
+
+
+type Auth
+    = SignedOut
+    | SignInFailed String
+    | SigningIn
+    | SignedIn String
 
 
 type alias Model =
-    { activeBill : Maybe Bill
+    { activeBill : Maybe Bill.Model
     , bills : List BillMetadata
     , verdicts : List Verdict
     , loading : Bool
@@ -32,6 +43,8 @@ type alias Model =
     , apiKey : String
     , feedback : String
     , showSponsor : Bool
+    , auth : Auth
+    , page : Page
     }
 
 
@@ -45,7 +58,9 @@ init : Flags -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init { apiKey, maybeModel } url key =
     case maybeModel of
         Nothing ->
-            ( { activeBill = Nothing
+            ( { page = Home
+              , auth = SignedOut
+              , activeBill = Nothing
               , bills = []
               , verdicts = []
               , loading = True
@@ -62,14 +77,6 @@ init { apiKey, maybeModel } url key =
 
         Just model ->
             ( model, Cmd.none )
-
-
-getFirstBills : Model -> Cmd Msg
-getFirstBills model =
-    Http.get
-        { url = CongressApi.url model.apiKey
-        , expect = Http.expectJson GotBills BillMetadata.decoder
-        }
 
 
 getNextBills : String -> String -> Cmd Msg
@@ -101,22 +108,22 @@ logVerdict verdict =
 ---- UPDATE ----
 
 
-type Msg
-    = UrlChanged Url.Url
-    | UrlRequested UrlRequest
-    | GotBills (Result Http.Error BillMetadataRes)
-    | GotBill (Result Http.Error BillRes)
-    | SetVerdict Bill Bool
-    | LogRes (Result Http.Error ())
-    | ShowSponsor
-
-
 getBill : String -> BillMetadata -> Cmd Msg
 getBill key { url } =
     Http.get
         { url = CongressApi.addKey key url
         , expect = Http.expectJson GotBill Bill.decoder
         }
+
+
+type Msg
+    = UrlChanged Url.Url
+    | UrlRequested UrlRequest
+    | GotBills (Result Http.Error BillMetadataRes)
+    | GotBill (Result Http.Error Bill.BillRes)
+    | SetVerdict Bill.Model Bool
+    | LogRes (Result Http.Error ())
+    | ShowSponsor
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -214,20 +221,25 @@ update msg model =
 ---- VIEW ----
 
 
+verdictView : Model -> Html Msg
+verdictView model =
+    case model.activeBill of
+        Nothing ->
+            div [ class "mt-1 mx-1 text-center" ]
+                [ text "Loading bill..."
+                ]
+
+        Just bill ->
+            div [ class "mt-1 mx-1" ]
+                [ yesNo bill
+                , Bill.view ShowSponsor model.showSponsor bill
+                ]
+
+
 view : Model -> Html Msg
 view model =
     div [ class "full-frame" ]
-        [ case model.activeBill of
-            Nothing ->
-                div [ class "mt-1 mx-1 text-center" ]
-                    [ text "Loading bill..."
-                    ]
-
-            Just bill ->
-                div [ class "mt-1 mx-1" ]
-                    [ yesNo bill
-                    , Bill.view ShowSponsor model.showSponsor bill
-                    ]
+        [ verdictView model
         , div [ class "flex" ]
             [ div [] [ a [ href "https://github.com/EvanPiro/legiswipe.com" ] [ text "Source Code" ] ]
             , div [] [ a [ href "https://evanpiro.com" ] [ text "© Evan Piro 2023" ] ]
@@ -235,7 +247,7 @@ view model =
         ]
 
 
-yesNo : Bill -> Html Msg
+yesNo : Bill.Model -> Html Msg
 yesNo bill =
     div [ class "flex" ]
         [ button [ class "btn", onClick <| SetVerdict bill False ] [ text "❌" ]

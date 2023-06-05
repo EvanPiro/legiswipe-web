@@ -1,4 +1,4 @@
-module Bill exposing (Bill, BillRes, Sponsor, decoder, encode, toUrl, view)
+module Bill exposing (BillRes, Model, Sponsor, decoder, encode, toUrl, view)
 
 import Html.Styled exposing (Html, a, button, div, h1, h2, h3, h4, p, span, text)
 import Html.Styled.Attributes exposing (class, href, target)
@@ -54,7 +54,7 @@ sponsorsDecoder =
             (field "fullName" string)
 
 
-type alias Bill =
+type alias Model =
     { introducedDate : String
     , sponsors : List Sponsor
     , policyArea : Maybe PolicyArea
@@ -65,7 +65,7 @@ type alias Bill =
     }
 
 
-encode : Bill -> Encode.Value
+encode : Model -> Encode.Value
 encode bill =
     Encode.object
         [ ( "introducedDate", Encode.string bill.introducedDate )
@@ -87,9 +87,9 @@ encodeSponsor { firstName, lastName, party, fullName } =
         ]
 
 
-billDecoder : Decoder Bill
+billDecoder : Decoder Model
 billDecoder =
-    map7 Bill
+    map7 Model
         (field "introducedDate" string)
         (field "sponsors" sponsorsDecoder)
         (maybe (field "policyArea" policyAreaDecoder))
@@ -100,7 +100,7 @@ billDecoder =
 
 
 type alias BillRes =
-    { bill : Bill
+    { bill : Model
     , request : Request
     }
 
@@ -121,7 +121,7 @@ sponsorsView sponsors =
         ]
 
 
-view : msg -> Bool -> Bill -> Html msg
+view : msg -> Bool -> Model -> Html msg
 view showSponsor sponsorShow bill =
     let
         sponsor =
@@ -140,7 +140,7 @@ view showSponsor sponsorShow bill =
         ]
 
 
-toUrl : Bill -> String
+toUrl : Model -> String
 toUrl bill =
     case ( bill.type_, bill.congress ) of
         -- Senate
