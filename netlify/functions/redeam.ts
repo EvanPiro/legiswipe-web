@@ -7,9 +7,17 @@ const handler: Handler = async (
   event: HandlerEvent,
   context: HandlerContext
 ) => {
+  const data = {
+    quantity: 610,
+    address: event.queryStringParameters.address,
+    from: event.queryStringParameters.from,
+  };
+
+  console.log(data);
+
   return {
     statusCode: 200,
-    body: JSON.stringify(610),
+    body: JSON.stringify(data),
   };
 };
 

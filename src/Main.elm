@@ -4,11 +4,10 @@ import Bill exposing (Bill, BillRes)
 import BillMetadata exposing (BillMetadata, BillMetadataRes)
 import Browser
 import CongressApi
-import Html exposing (Html, a, button, div, h1, img, p, text)
-import Html.Attributes exposing (class, href, src)
-import Html.Events exposing (onClick)
+import Html.Styled exposing (Html, a, button, div, h1, img, p, text, toUnstyled)
+import Html.Styled.Attributes exposing (class, href, src)
+import Html.Styled.Events exposing (onClick)
 import Http as Http exposing (Error(..))
-import Json.Decode as Decoder exposing (Decoder)
 import Json.Encode as Encode
 import List exposing (head)
 import LogApi
@@ -243,19 +242,6 @@ update msg model =
 ---- VIEW ----
 
 
-stats : Model -> Html Msg
-stats model =
-    let
-        yesCount =
-            String.fromInt <| List.length <| List.filter (\( _, n ) -> n == True) model.verdicts
-
-        noCount =
-            String.fromInt <| List.length <| List.filter (\( _, n ) -> n == False) model.verdicts
-    in
-    div [ class "flex" ]
-        [ div [] [ text <| "Rejected: " ++ noCount ], div [] [ text <| "Accepted: " ++ yesCount ] ]
-
-
 view : Model -> Html Msg
 view model =
     div [ class "full-frame" ]
@@ -307,7 +293,7 @@ yesNo bill =
 main : Program Env Model Msg
 main =
     Browser.element
-        { view = view
+        { view = view >> toUnstyled
         , init = init
         , update = update
         , subscriptions = always <| signInSuccess SignInSuccess
