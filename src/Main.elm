@@ -1,8 +1,9 @@
-port module Main exposing (Model, Msg(..), init, main, update, view)
+module Main exposing (Model, Msg(..), init, main, update, view)
 
 import Bill exposing (Bill, BillRes)
 import BillMetadata exposing (BillMetadata, BillMetadataRes)
-import Browser
+import Browser exposing (UrlRequest)
+import Browser.Navigation as Nav
 import CongressApi
 import Html.Styled exposing (Html, a, button, div, h1, img, p, text, toUnstyled)
 import Html.Styled.Attributes exposing (class, href, src)
@@ -11,17 +12,7 @@ import Http as Http exposing (Error(..))
 import Json.Encode as Encode
 import List exposing (head)
 import LogApi
-
-
-modelVersion : String
-modelVersion =
-    "v1"
-
-
-port cache : Model -> Cmd msg
-
-
-port clearCache : String -> Cmd msg
+import Url
 
 
 
@@ -41,7 +32,6 @@ type alias Model =
     , apiKey : String
     , feedback : String
     , showSponsor : Bool
-    , modelVersion : String
     }
 
 
@@ -51,8 +41,8 @@ type alias Flags =
     }
 
 
-init : Flags -> ( Model, Cmd Msg )
-init { apiKey, maybeModel } =
+init : Flags -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init { apiKey, maybeModel } url key =
     case maybeModel of
         Nothing ->
             ( { activeBill = Nothing
@@ -63,7 +53,6 @@ init { apiKey, maybeModel } =
               , apiKey = apiKey
               , feedback = ""
               , showSponsor = False
-              , modelVersion = modelVersion
               }
             , Http.get
                 { url = CongressApi.url apiKey
@@ -113,11 +102,12 @@ logVerdict verdict =
 
 
 type Msg
-    = GotBills (Result Http.Error BillMetadataRes)
+    = UrlChanged Url.Url
+    | UrlRequested UrlRequest
+    | GotBills (Result Http.Error BillMetadataRes)
     | GotBill (Result Http.Error BillRes)
     | SetVerdict Bill Bool
     | LogRes (Result Http.Error ())
-    | ClearCache
     | ShowSponsor
 
 
@@ -132,11 +122,14 @@ getBill key { url } =
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
+        UrlChanged url ->
+            ( model, Cmd.none )
+
+        UrlRequested req ->
+            ( model, Cmd.none )
+
         ShowSponsor ->
             ( { model | showSponsor = True }, Cmd.none )
-
-        ClearCache ->
-            ( model, Cmd.batch [ getFirstBills model, clearCache "" ] )
 
         LogRes res ->
             ( model, Cmd.none )
@@ -165,7 +158,7 @@ update msg model =
                 newModel =
                     { model | bills = bills, next = next }
             in
-            ( newModel, Cmd.batch [ cache newModel, reqCmd ] )
+            ( newModel, reqCmd )
 
         GotBill res ->
             case res of
@@ -186,7 +179,7 @@ update msg model =
                         newModel =
                             { model | activeBill = Just ok.bill, showSponsor = False }
                     in
-                    ( newModel, cache newModel )
+                    ( newModel, Cmd.none )
 
         SetVerdict bill bool ->
             let
@@ -213,7 +206,7 @@ update msg model =
                     }
             in
             ( newModel
-            , Cmd.batch [ cache newModel, reqCmd, logVerdict verdict ]
+            , Cmd.batch [ reqCmd, logVerdict verdict ]
             )
 
 
@@ -228,7 +221,6 @@ view model =
             Nothing ->
                 div [ class "mt-1 mx-1 text-center" ]
                     [ text "Loading bill..."
-                    , div [ class "mt-1" ] [ button [ onClick ClearCache ] [ text "Reset" ] ]
                     ]
 
             Just bill ->
@@ -257,9 +249,11 @@ yesNo bill =
 
 main : Program Flags Model Msg
 main =
-    Browser.element
-        { view = view >> toUnstyled
+    Browser.application
+        { view = view >> toUnstyled >> (\body -> { title = "legiswipe", body = [ body ] })
         , init = init
         , update = update
         , subscriptions = always Sub.none
+        , onUrlRequest = UrlRequested
+        , onUrlChange = UrlChanged
         }

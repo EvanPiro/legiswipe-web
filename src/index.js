@@ -15,17 +15,9 @@ const maybeModel = rawData ? Migrations.upgrade(JSON.parse(rawData)) : null;
 
 const flags = { maybeModel, apiKey };
 
-const app = Elm.Main.init({
+Elm.Main.init({
   node: document.getElementById("root"),
   flags,
-});
-
-app.ports.cache.subscribe(function (model) {
-  localStorage.setItem(key, JSON.stringify(model));
-});
-
-app.ports.clearCache.subscribe(function (model) {
-  localStorage.clear();
 });
 
 serviceWorker.unregister();
