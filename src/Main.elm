@@ -1,4 +1,4 @@
-module Main exposing (Model, Msg(..), init, main, update, view)
+port module Main exposing (Model, Msg(..), init, main, update, view)
 
 import Bill as Bill
 import BillMetadata exposing (BillMetadata, BillMetadataRes)
@@ -12,6 +12,15 @@ import Http as Http exposing (Error(..))
 import Json.Encode as Encode
 import LogApi
 import Url
+
+
+port signIn : String -> Cmd msg
+
+
+port signInSuccess : (String -> msg) -> Sub msg
+
+
+port signInFail : (String -> msg) -> Sub msg
 
 
 
@@ -34,13 +43,23 @@ type Auth
     | SignedIn String
 
 
+authToMaybe : Auth -> Maybe String
+authToMaybe auth =
+    case auth of
+        SignedIn cred ->
+            Just cred
+
+        _ ->
+            Nothing
+
+
 type alias Model =
     { activeBill : Maybe Bill.Model
     , bills : List BillMetadata
     , verdicts : List Verdict
     , loading : Bool
     , next : String
-    , apiKey : String
+    , env : Env
     , feedback : String
     , showSponsor : Bool
     , auth : Auth
@@ -48,35 +67,36 @@ type alias Model =
     }
 
 
-type alias Flags =
-    { apiKey : String
-    , maybeModel : Maybe Model
-    }
+type alias Env =
+    { apiKey : String, googleClientId : String }
 
 
-init : Flags -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
-init { apiKey, maybeModel } url key =
-    case maybeModel of
-        Nothing ->
-            ( { page = Home
-              , auth = SignedOut
-              , activeBill = Nothing
-              , bills = []
-              , verdicts = []
-              , loading = True
-              , next = ""
-              , apiKey = apiKey
-              , feedback = ""
-              , showSponsor = False
-              }
-            , Http.get
-                { url = CongressApi.url apiKey
-                , expect = Http.expectJson GotBills BillMetadata.decoder
-                }
-            )
+init : Env -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
+init env url key =
+    ( { activeBill = Nothing
+      , bills = []
+      , verdicts = []
+      , loading = True
+      , next = ""
+      , env = env
+      , feedback = ""
+      , showSponsor = False
+      , auth = SignedOut
+      , page = Home
+      }
+    , Http.get
+        { url = CongressApi.url env.apiKey
+        , expect = Http.expectJson GotBills BillMetadata.decoder
+        }
+    )
 
-        Just model ->
-            ( model, Cmd.none )
+
+getFirstBills : Model -> Cmd Msg
+getFirstBills model =
+    Http.get
+        { url = CongressApi.url model.env.apiKey
+        , expect = Http.expectJson GotBills BillMetadata.decoder
+        }
 
 
 getNextBills : String -> String -> Cmd Msg
@@ -87,25 +107,22 @@ getNextBills key url =
         }
 
 
-encodeVerdict : Verdict -> Encode.Value
-encodeVerdict ( bill, bool ) =
+encodeVerdict : String -> Verdict -> Encode.Value
+encodeVerdict creds ( bill, bool ) =
     Encode.object
         [ ( "verdict", Encode.bool bool )
         , ( "bill", Bill.encode bill )
+        , ( "credential", Encode.string creds )
         ]
 
 
-logVerdict : Verdict -> Cmd Msg
-logVerdict verdict =
+logVerdict : String -> Verdict -> Cmd Msg
+logVerdict creds verdict =
     Http.post
         { url = LogApi.path
-        , body = Http.jsonBody <| encodeVerdict verdict
+        , body = Http.jsonBody <| encodeVerdict creds verdict
         , expect = Http.expectWhatever LogRes
         }
-
-
-
----- UPDATE ----
 
 
 getBill : String -> BillMetadata -> Cmd Msg
@@ -116,6 +133,10 @@ getBill key { url } =
         }
 
 
+
+---- UPDATE ----
+
+
 type Msg
     = UrlChanged Url.Url
     | UrlRequested UrlRequest
@@ -124,6 +145,9 @@ type Msg
     | SetVerdict Bill.Model Bool
     | LogRes (Result Http.Error ())
     | ShowSponsor
+    | SignIn
+    | SignInSuccess String
+    | SignInFail String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -134,6 +158,15 @@ update msg model =
 
         UrlRequested req ->
             ( model, Cmd.none )
+
+        SignIn ->
+            ( { model | auth = SigningIn }, signIn model.env.googleClientId )
+
+        SignInSuccess token ->
+            ( { model | auth = SignedIn token }, Cmd.none )
+
+        SignInFail str ->
+            ( { model | auth = SignInFailed str }, Cmd.none )
 
         ShowSponsor ->
             ( { model | showSponsor = True }, Cmd.none )
@@ -157,7 +190,7 @@ update msg model =
                 reqCmd =
                     case List.head bills of
                         Just bill ->
-                            getBill model.apiKey bill
+                            getBill model.env.apiKey bill
 
                         _ ->
                             Cmd.none
@@ -199,10 +232,10 @@ update msg model =
                 reqCmd =
                     case List.head newBills of
                         Just billMetadata ->
-                            getBill model.apiKey billMetadata
+                            getBill model.env.apiKey billMetadata
 
                         _ ->
-                            getNextBills model.apiKey model.next
+                            getNextBills model.env.apiKey model.next
 
                 newModel =
                     { model
@@ -213,7 +246,15 @@ update msg model =
                     }
             in
             ( newModel
-            , Cmd.batch [ reqCmd, logVerdict verdict ]
+            , Cmd.batch
+                [ reqCmd
+                , logVerdict
+                    (model.auth
+                        |> authToMaybe
+                        |> Maybe.withDefault ""
+                    )
+                    verdict
+                ]
             )
 
 
@@ -247,6 +288,22 @@ view model =
         ]
 
 
+logInButton : Model -> Html Msg
+logInButton model =
+    case model.auth of
+        SignedOut ->
+            div [ class "mt-2" ] [ button [ onClick SignIn ] [ text "Log in" ] ]
+
+        SignedIn _ ->
+            div [] []
+
+        SigningIn ->
+            div [] [ text "signing in" ]
+
+        SignInFailed _ ->
+            div [] [ text "sign in failed" ]
+
+
 yesNo : Bill.Model -> Html Msg
 yesNo bill =
     div [ class "flex" ]
@@ -259,13 +316,13 @@ yesNo bill =
 ---- PROGRAM ----
 
 
-main : Program Flags Model Msg
+main : Program Env Model Msg
 main =
     Browser.application
         { view = view >> toUnstyled >> (\body -> { title = "legiswipe", body = [ body ] })
         , init = init
         , update = update
-        , subscriptions = always Sub.none
         , onUrlRequest = UrlRequested
         , onUrlChange = UrlChanged
+        , subscriptions = \_ -> Sub.batch [ signInSuccess SignInSuccess, signInFail SignInFail ]
         }
