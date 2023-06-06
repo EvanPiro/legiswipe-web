@@ -1,10 +1,11 @@
-module Bill exposing (Bill, BillRes, Sponsor, decoder, encode, toUrl, view)
+module Bill exposing (BillRes, Model, Sponsor, blank, decoder, encode, toUrl, view)
 
 import Html.Styled exposing (Html, a, button, div, h1, h2, h3, h4, p, span, text)
-import Html.Styled.Attributes exposing (class, href, target)
+import Html.Styled.Attributes exposing (class, css, href, target)
 import Html.Styled.Events exposing (onClick)
 import Json.Decode exposing (Decoder, field, int, list, map, map2, map3, map4, map5, map6, map7, maybe, string)
 import Json.Encode as Encode exposing (encode, object)
+import Tailwind.Utilities as T
 
 
 type alias PolicyArea =
@@ -54,7 +55,7 @@ sponsorsDecoder =
             (field "fullName" string)
 
 
-type alias Bill =
+type alias Model =
     { introducedDate : String
     , sponsors : List Sponsor
     , policyArea : Maybe PolicyArea
@@ -65,7 +66,19 @@ type alias Bill =
     }
 
 
-encode : Bill -> Encode.Value
+blank : String -> String -> Model
+blank number type_ =
+    { introducedDate = ""
+    , sponsors = []
+    , policyArea = Nothing
+    , title = ""
+    , number = number
+    , type_ = type_
+    , congress = 0
+    }
+
+
+encode : Model -> Encode.Value
 encode bill =
     Encode.object
         [ ( "introducedDate", Encode.string bill.introducedDate )
@@ -87,9 +100,9 @@ encodeSponsor { firstName, lastName, party, fullName } =
         ]
 
 
-billDecoder : Decoder Bill
+billDecoder : Decoder Model
 billDecoder =
-    map7 Bill
+    map7 Model
         (field "introducedDate" string)
         (field "sponsors" sponsorsDecoder)
         (maybe (field "policyArea" policyAreaDecoder))
@@ -100,7 +113,7 @@ billDecoder =
 
 
 type alias BillRes =
-    { bill : Bill
+    { bill : Model
     , request : Request
     }
 
@@ -121,13 +134,13 @@ sponsorsView sponsors =
         ]
 
 
-view : msg -> Bool -> Bill -> Html msg
+view : msg -> Bool -> Model -> Html msg
 view showSponsor sponsorShow bill =
     let
         sponsor =
             case sponsorShow of
                 False ->
-                    div [] [ button [ onClick showSponsor ] [ text "Show Sponsor" ] ]
+                    div [ css [ T.my_4 ] ] [ button [ onClick showSponsor ] [ text "Show Sponsor" ] ]
 
                 True ->
                     sponsorsView bill.sponsors
@@ -135,12 +148,12 @@ view showSponsor sponsorShow bill =
     div []
         [ h2 [] [ text bill.title ]
         , sponsor
-        , div [ class "mt-1" ] [ text <| "Introduced " ++ bill.introducedDate ]
-        , div [ class "mt-1" ] [ a [ href <| toUrl bill, target "_blank" ] [ text "🔗 More info" ] ]
+        , div [ css [ T.my_4 ] ] [ text <| "Introduced " ++ bill.introducedDate ]
+        , div [ css [ T.my_4 ] ] [ a [ href <| toUrl bill, target "_blank" ] [ text "🔗 More info" ] ]
         ]
 
 
-toUrl : Bill -> String
+toUrl : Model -> String
 toUrl bill =
     case ( bill.type_, bill.congress ) of
         -- Senate
