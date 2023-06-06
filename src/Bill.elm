@@ -1,4 +1,4 @@
-module Bill exposing (BillRes, Model, Sponsor, blank, decoder, encode, toUrl, view)
+module Bill exposing (BillRes, Model, Sponsor, blank, decoder, encode, toBillId, toUrl, view)
 
 import Html.Styled exposing (Html, a, button, div, h1, h2, h3, h4, p, span, text)
 import Html.Styled.Attributes exposing (class, css, href, target)
@@ -151,6 +151,11 @@ view showSponsor sponsorShow bill =
         , div [ css [ T.my_4 ] ] [ text <| "Introduced " ++ bill.introducedDate ]
         , div [ css [ T.my_4 ] ] [ a [ href <| toUrl bill, target "_blank" ] [ text "🔗 More info" ] ]
         ]
+
+
+toBillId : Model -> String
+toBillId model =
+    String.fromInt model.congress ++ "-" ++ model.type_ ++ "-" ++ model.number
 
 
 toUrl : Model -> String

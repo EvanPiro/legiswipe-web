@@ -11,19 +11,20 @@ import Html.Styled.Attributes exposing (class, css, href, src)
 import Html.Styled.Events exposing (onClick)
 import Http as Http exposing (Error(..))
 import Json.Encode as Encode
-import LogApi
 import Route exposing (Route)
 import Tailwind.Utilities as T
 import Url
+import VoteApi
+import VoterApi as Voter exposing (Voter)
 
 
-port signIn : String -> Cmd msg
+port getAuthToken : String -> Cmd msg
 
 
-port signInSuccess : (String -> msg) -> Sub msg
+port authTokenSuccess : (String -> msg) -> Sub msg
 
 
-port signInFail : (String -> msg) -> Sub msg
+port authTokenFail : (String -> msg) -> Sub msg
 
 
 
@@ -38,13 +39,14 @@ type Auth
     = SignedOut
     | SignInFailed String
     | SigningIn
-    | SignedIn String
+    | ValidatingAuth String
+    | SignedIn Voter
 
 
 authToMaybe : Auth -> Maybe String
 authToMaybe auth =
     case auth of
-        SignedIn cred ->
+        ValidatingAuth cred ->
             Just cred
 
         _ ->
@@ -63,6 +65,7 @@ type alias Model =
     , auth : Auth
     , route : Route
     , key : Nav.Key
+    , creds : Maybe String
     }
 
 
@@ -83,6 +86,7 @@ init env url key =
       , auth = SignedOut
       , route = Route.fromUrl url
       , key = key
+      , creds = Nothing
       }
     , Http.get
         { url = CongressApi.url env.apiKey
@@ -111,15 +115,16 @@ encodeVerdict : String -> Verdict -> Encode.Value
 encodeVerdict creds ( bill, bool ) =
     Encode.object
         [ ( "verdict", Encode.bool bool )
+        , ( "billId", Encode.string <| Bill.toBillId bill )
         , ( "bill", Bill.encode bill )
-        , ( "credential", Encode.string creds )
+        , ( "credentials", Encode.string creds )
         ]
 
 
 logVerdict : String -> Verdict -> Cmd Msg
 logVerdict creds verdict =
     Http.post
-        { url = LogApi.path
+        { url = VoteApi.path
         , body = Http.jsonBody <| encodeVerdict creds verdict
         , expect = Http.expectWhatever LogRes
         }
@@ -144,10 +149,11 @@ type Msg
     | GotBill (Result Http.Error Bill.BillRes)
     | SetVerdict Bill.Model Bool
     | LogRes (Result Http.Error ())
+    | GotVoter (Result Http.Error Voter)
     | ShowSponsor
     | SignIn
-    | SignInSuccess String
-    | SignInFail String
+    | AuthTokenSuccess String
+    | AuthTokenFail String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -169,13 +175,22 @@ update msg model =
             ( model, cmd )
 
         SignIn ->
-            ( { model | auth = SigningIn }, signIn model.env.googleClientId )
+            ( { model | auth = SigningIn }, getAuthToken model.env.googleClientId )
 
-        SignInSuccess token ->
-            ( { model | auth = SignedIn token }, Cmd.none )
+        AuthTokenSuccess token ->
+            ( { model | auth = ValidatingAuth token, creds = Just token }, Voter.request GotVoter token )
 
-        SignInFail str ->
+        AuthTokenFail str ->
             ( { model | auth = SignInFailed str }, Cmd.none )
+
+        -- @Todo store JWT for persistent session after refresh.
+        GotVoter res ->
+            case res of
+                Err _ ->
+                    ( { model | auth = SignInFailed "backend error" }, Cmd.none )
+
+                Ok voter ->
+                    ( { model | auth = SignedIn voter }, Cmd.none )
 
         ShowSponsor ->
             ( { model | showSponsor = True }, Cmd.none )
@@ -258,8 +273,7 @@ update msg model =
             , Cmd.batch
                 [ reqCmd
                 , logVerdict
-                    (model.auth
-                        |> authToMaybe
+                    (model.creds
                         |> Maybe.withDefault ""
                     )
                     verdict
@@ -322,17 +336,17 @@ homeView model =
                     "Sign in"
                 ]
 
-        SignedIn _ ->
+        SignedIn voter ->
             div []
-                [ div [ css [ T.my_5, T.px_3 ] ] [ text "Welcome! There are bills awaiting your vote." ]
+                [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "Welcome " ++ voter.firstName ++ "! There are bills awaiting your vote." ]
                 , brandedButton (Just <| Route.billToUrl <| Bill.blank "now" "see") [] [] "Vote now"
                 ]
 
-        SigningIn ->
-            div [] [ text "Signing in..." ]
-
         SignInFailed _ ->
             div [] [ text "sign in failed" ]
+
+        _ ->
+            div [] [ text "Signing in..." ]
 
 
 yesNo : Bill.Model -> Html Msg
@@ -395,5 +409,5 @@ main =
         , update = update
         , onUrlRequest = UrlRequested
         , onUrlChange = UrlChanged
-        , subscriptions = \_ -> Sub.batch [ signInSuccess SignInSuccess, signInFail SignInFail ]
+        , subscriptions = \_ -> Sub.batch [ authTokenSuccess AuthTokenSuccess, authTokenFail AuthTokenFail ]
         }

@@ -13,14 +13,14 @@ const app = Elm.Main.init({
   },
 });
 
-app.ports.signIn.subscribe(function (googleClientId) {
+app.ports.getAuthToken.subscribe(function (googleClientId) {
   console.log("log on clicked");
   console.log(googleClientId);
   google.accounts.id.initialize({
     client_id: googleClientId,
     callback: function (obj) {
       console.log(obj);
-      app.ports.signInSuccess.send(obj.credential);
+      app.ports.authTokenSuccess.send(obj.credential);
     },
   });
   google.accounts.id.prompt();

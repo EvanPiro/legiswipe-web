@@ -1,0 +1,1 @@
+source .env && elm-app build && cp _redirects build/ && netlify dev
