@@ -1,1 +1,1 @@
-npm install && ELM_APP_API_KEY=$API_KEY && ELM_APP_GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID npx elm-app build
+npm install && ELM_APP_API_KEY=$API_KEY ELM_APP_GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID npx elm-app build
