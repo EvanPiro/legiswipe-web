@@ -3,8 +3,8 @@
   "name": "Legiswipe",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "192x192",
+      "src": "./favicon.ico",
+      "sizes": "16x16",
       "type": "image/png"
     }
   ],

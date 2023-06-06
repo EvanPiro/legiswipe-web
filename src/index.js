@@ -5,8 +5,6 @@ import * as dotenv from "dotenv";
 
 dotenv.config();
 
-console.log(process.env);
-
 const app = Elm.Main.init({
   node: document.getElementById("root"),
   flags: {
