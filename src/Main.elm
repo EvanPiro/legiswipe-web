@@ -453,7 +453,7 @@ brandedButton linked attrs nodes str =
 main : Program Env Model Msg
 main =
     Browser.application
-        { view = view >> toUnstyled >> (\body -> { title = "legiswipe", body = [ body ] })
+        { view = view >> toUnstyled >> (\body -> { title = "Legiswipe", body = [ body ] })
         , init = init
         , update = update
         , onUrlRequest = UrlRequested
