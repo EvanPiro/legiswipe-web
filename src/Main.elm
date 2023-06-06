@@ -154,6 +154,7 @@ type Msg
     | SignIn
     | AuthTokenSuccess String
     | AuthTokenFail String
+    | ConnectWallet
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -280,6 +281,9 @@ update msg model =
                 ]
             )
 
+        ConnectWallet ->
+            ( model, Cmd.none )
+
 
 
 ---- VIEW ----
@@ -337,9 +341,45 @@ homeView model =
                 ]
 
         SignedIn voter ->
+            let
+                redeemView =
+                    case voter.canRedeem of
+                        0 ->
+                            div [] []
+
+                        n ->
+                            div [] <|
+                                [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "You also have " ++ String.fromInt n ++ " tokens to redeem. Connect a wallet  to get them!" ]
+                                , brandedButton Nothing
+                                    [ onClick ConnectWallet
+                                    , css
+                                        [ T.px_4
+                                        , T.py_2
+                                        ]
+                                    ]
+                                    [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                                    "Connect Wallet"
+                                ]
+            in
             div []
-                [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "Welcome " ++ voter.firstName ++ "! There are bills awaiting your vote." ]
-                , brandedButton (Just <| Route.billToUrl <| Bill.blank "now" "see") [] [] "Vote now"
+                [ div [] <|
+                    [ div
+                        [ css
+                            [ T.my_5
+                            , T.px_3
+                            ]
+                        ]
+                        [ text <| "Welcome " ++ voter.firstName ++ "! There are bills awaiting your vote." ]
+                    , brandedButton (Just <| Route.billToUrl <| Bill.blank "now" "see")
+                        [ css
+                            [ T.px_4
+                            , T.py_2
+                            ]
+                        ]
+                        []
+                        "Vote now"
+                    ]
+                , redeemView
                 ]
 
         SignInFailed _ ->

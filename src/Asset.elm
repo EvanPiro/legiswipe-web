@@ -1,4 +1,4 @@
-module Asset exposing (Asset, googleLogo, legiswipeLogo, toPath)
+module Asset exposing (Asset, googleLogo, legiswipeLogo, metamaskLogo, toPath)
 
 
 toPath : Asset -> String
@@ -18,3 +18,8 @@ legiswipeLogo =
 googleLogo : Asset
 googleLogo =
     Asset "google-logo.svg"
+
+
+metamaskLogo : Asset
+metamaskLogo =
+    Asset "metamask-logo.svg"
