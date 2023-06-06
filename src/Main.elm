@@ -1,16 +1,19 @@
 port module Main exposing (Model, Msg(..), init, main, update, view)
 
+import Asset
 import Bill as Bill
 import BillMetadata exposing (BillMetadata, BillMetadataRes)
 import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
 import CongressApi
-import Html.Styled exposing (Html, a, button, div, text, toUnstyled)
-import Html.Styled.Attributes exposing (class, href)
+import Html.Styled exposing (Attribute, Html, a, button, div, img, text, toUnstyled)
+import Html.Styled.Attributes exposing (class, css, href, src)
 import Html.Styled.Events exposing (onClick)
 import Http as Http exposing (Error(..))
 import Json.Encode as Encode
 import LogApi
+import Route exposing (Route)
+import Tailwind.Utilities as T
 import Url
 
 
@@ -25,11 +28,6 @@ port signInFail : (String -> msg) -> Sub msg
 
 
 ---- MODEL ----
-
-
-type Page
-    = Home
-    | Bill
 
 
 type alias Verdict =
@@ -63,7 +61,8 @@ type alias Model =
     , feedback : String
     , showSponsor : Bool
     , auth : Auth
-    , page : Page
+    , route : Route
+    , key : Nav.Key
     }
 
 
@@ -82,7 +81,8 @@ init env url key =
       , feedback = ""
       , showSponsor = False
       , auth = SignedOut
-      , page = Home
+      , route = Route.fromUrl url
+      , key = key
       }
     , Http.get
         { url = CongressApi.url env.apiKey
@@ -154,10 +154,19 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UrlChanged url ->
-            ( model, Cmd.none )
+            ( { model | route = Route.fromUrl url }, Cmd.none )
 
         UrlRequested req ->
-            ( model, Cmd.none )
+            let
+                cmd =
+                    case req of
+                        Browser.Internal url ->
+                            Nav.pushUrl model.key (Url.toString url)
+
+                        Browser.External str ->
+                            Nav.load str
+            in
+            ( model, cmd )
 
         SignIn ->
             ( { model | auth = SigningIn }, signIn model.env.googleClientId )
@@ -262,8 +271,8 @@ update msg model =
 ---- VIEW ----
 
 
-verdictView : Model -> Html Msg
-verdictView model =
+billView : Model -> Html Msg
+billView model =
     case model.activeBill of
         Nothing ->
             div [ class "mt-1 mx-1 text-center" ]
@@ -279,26 +288,48 @@ verdictView model =
 
 view : Model -> Html Msg
 view model =
-    div [ class "full-frame" ]
-        [ verdictView model
-        , div [ class "flex" ]
-            [ div [] [ a [ href "https://github.com/EvanPiro/legiswipe.com" ] [ text "Source Code" ] ]
-            , div [] [ a [ href "https://evanpiro.com" ] [ text "© Evan Piro 2023" ] ]
+    div [ class "view" ]
+        [ div [ class "header", css [ T.text_center ] ] [ a [ href (Route.toUrlString Route.Home) ] [ img [ src (Asset.toPath Asset.legiswipeLogo) ] [] ] ]
+        , div [ class "content", css [ T.text_center, T.my_3 ] ]
+            [ case model.route of
+                Route.Home ->
+                    homeView model
+
+                Route.Bill _ _ ->
+                    billView model
+
+                Route.NotFound ->
+                    div [] [ text "Oops! looks like this url is not supported." ]
             ]
+        , div [ class "footer" ] []
         ]
 
 
-logInButton : Model -> Html Msg
-logInButton model =
+homeView : Model -> Html Msg
+homeView model =
     case model.auth of
         SignedOut ->
-            div [ class "mt-2" ] [ button [ onClick SignIn ] [ text "Log in" ] ]
+            div []
+                [ div [ css [ T.my_5, T.px_3 ] ] [ text "Participating in democracy one bill at a time." ]
+                , brandedButton Nothing
+                    [ onClick SignIn
+                    , css
+                        [ T.px_4
+                        , T.py_2
+                        ]
+                    ]
+                    [ img [ src (Asset.toPath Asset.googleLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                    "Sign in"
+                ]
 
         SignedIn _ ->
-            div [] []
+            div []
+                [ div [ css [ T.my_5, T.px_3 ] ] [ text "Welcome! There are bills awaiting your vote." ]
+                , brandedButton (Just <| Route.billToUrl <| Bill.blank "now" "see") [] [] "Vote now"
+                ]
 
         SigningIn ->
-            div [] [ text "signing in" ]
+            div [] [ text "Signing in..." ]
 
         SignInFailed _ ->
             div [] [ text "sign in failed" ]
@@ -306,10 +337,50 @@ logInButton model =
 
 yesNo : Bill.Model -> Html Msg
 yesNo bill =
-    div [ class "flex" ]
-        [ button [ class "btn", onClick <| SetVerdict bill False ] [ text "❌" ]
-        , button [ class "btn", onClick <| SetVerdict bill True ] [ text "✅" ]
+    let
+        btnStyles =
+            css [ T.text_3xl, T.leading_tight, T.px_16, T.py_1 ]
+    in
+    div [ css [ T.flex, T.justify_between, T.my_7 ] ]
+        [ brandedButton Nothing [ onClick <| SetVerdict bill False, btnStyles ] [] "❌"
+        , brandedButton Nothing [ onClick <| SetVerdict bill True, btnStyles ] [] "✅"
         ]
+
+
+footer : Html Msg
+footer =
+    div [ class "flex" ]
+        [ div [] [ a [ href "https://github.com/EvanPiro/legiswipe.com" ] [ text "Source Code" ] ]
+        , div [] [ a [ href "https://evanpiro.com" ] [ text "© Evan Piro 2023" ] ]
+        ]
+
+
+brandedButton : Maybe String -> List (Attribute Msg) -> List (Html Msg) -> String -> Html Msg
+brandedButton linked attrs nodes str =
+    let
+        btnAttrs =
+            [ css
+                [ T.inline_flex
+                , T.align_middle
+                , T.items_center
+                , T.justify_center
+                , T.cursor_pointer
+                ]
+            ]
+                ++ attrs
+
+        btnNodes =
+            nodes ++ [ text str ]
+
+        btn =
+            button btnAttrs btnNodes
+    in
+    case linked of
+        Nothing ->
+            btn
+
+        Just url ->
+            a [ href url ] [ btn ]
 
 
 

@@ -5,73 +5,47 @@
   More context in the issue:
     https://github.com/halfzebra/create-elm-app/issues/320
 */
+
+@font-face {
+  font-family: 'LiberationMono-Medium';
+  src: url('../public/fonts/liberation-mono/LiberationMono-Bold.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LiberationMono-Bold';
+  src: url('../public/fonts/liberation-mono/LiberationMono-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'LiberationMono-Regular';
+  src: url('../public/fonts/liberation-mono/LiberationMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
 [data-elm-hot="true"] {
   height: inherit;
 }
 
 body {
-  font-family: 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'LiberationMono-Regular', 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
   margin: 0 auto;
+  padding: 1rem;
   max-width: 500px;
   color: #293c4b;
+  font-size: 1rem;
 }
 
-h1 {
-  font-size: 30px;
+body * {
+  line-height: normal;
 }
 
-img {
-  margin: 20px 0;
-  max-width: 200px;
-}
+button {
+  font-family: 'LiberationMono-Regular', 'Source Sans Pro', 'Trebuchet MS', 'Lucida Grande', 'Bitstream Vera Sans', 'Helvetica Neue', sans-serif;
 
-.flex {
-  display: flex;
-  justify-content: space-between;
-}
-
-.btn {
-  width: 10rem;
-  font-size: 2rem;
-}
-
-.mt-1 {
-  margin-top: 1rem;
-}
-
-.mt-2 {
-  margin-top: 2rem;
-}
-
-.mt-3 {
-  margin-top: 3rem;
-}
-
-.p-1 {
-  /*padding: 1rem;*/
-}
-
-.mx-1 {
-  margin-left: 1rem;
-  margin-right: 1rem;
-}
-
-.fixed-bottom {
-  position: fixed;
-  bottom:0%;
-}
-.text-right {
-  text-align: right;
-}
-
-.text-center {
-  text-align: center;
-}
-
-
-.full-frame {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  justify-content: space-between;
 }

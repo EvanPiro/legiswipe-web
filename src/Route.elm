@@ -1,6 +1,6 @@
-module Route exposing (Route(..), billToUrl, route, toRoute)
+module Route exposing (Route(..), billToUrl, fromUrl, route, toRoute, toUrlString)
 
-import Bill exposing (Bill)
+import Bill
 import Url exposing (Url)
 import Url.Builder exposing (absolute)
 import Url.Parser exposing ((</>), Parser, map, oneOf, parse, s, string, top)
@@ -20,6 +20,21 @@ route =
         ]
 
 
+fromUrl : Url.Url -> Route
+fromUrl url =
+    Maybe.withDefault NotFound (parse route url)
+
+
+toUrlString : Route -> String
+toUrlString r =
+    case r of
+        Bill type_ number ->
+            Bill.blank type_ number |> billToUrl
+
+        _ ->
+            "/"
+
+
 toRoute : String -> Route
 toRoute string =
     case Url.fromString string of
@@ -30,6 +45,6 @@ toRoute string =
             Maybe.withDefault NotFound (parse route url)
 
 
-billToUrl : Bill -> String
+billToUrl : Bill.Model -> String
 billToUrl bill =
-    absolute [ bill.type_, bill.number ] []
+    absolute [ "bill", bill.type_, bill.number ] []
