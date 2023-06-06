@@ -161,7 +161,16 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         UrlChanged url ->
-            ( { model | route = Route.fromUrl url }, Cmd.none )
+            let
+                creds =
+                    Maybe.withDefault "" model.creds
+            in
+            case Route.fromUrl url of
+                Route.Home ->
+                    ( { model | auth = ValidatingAuth creds, route = Route.Home }, Voter.request GotVoter creds )
+
+                route ->
+                    ( { model | route = route }, Cmd.none )
 
         UrlRequested req ->
             let
