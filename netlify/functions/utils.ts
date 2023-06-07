@@ -13,6 +13,8 @@ import {
   GetItemCommand,
   PutItemCommand,
   QueryCommand,
+  ScanCommand,
+  UpdateItemCommand,
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import abi from "../../src/tokenAbi";
@@ -37,6 +39,8 @@ const VoterPartial = t.partial({
 });
 
 export const Voter = t.intersection([VoterRequired, VoterPartial]);
+
+export const Voters = t.array(Voter);
 
 export type IVoter = t.TypeOf<typeof Voter>;
 
@@ -72,6 +76,21 @@ const VoteReq = t.type({
 });
 
 export type IVoteReq = t.TypeOf<typeof VoteReq>;
+
+const RedeemReq = t.type({
+  from: t.string,
+  address: t.string,
+});
+
+export type IRedeemReq = t.TypeOf<typeof RedeemReq>;
+
+const RedeemResp = t.type({
+  quantity: t.number,
+  address: t.string,
+  from: t.number,
+});
+
+export type IRedeemResp = t.TypeOf<typeof RedeemResp>;
 
 const mustBePost = (req: HandlerEvent): TaskEither<AppError, HandlerEvent> =>
   req.httpMethod === "POST"
@@ -126,6 +145,53 @@ const googleAuthPayloadToVoter = (payload: TokenPayload): IVoter => ({
   lastName: payload.family_name,
   googleAuthPayload: payload,
 });
+
+const addressToRawVoters =
+  (voterTable: string) =>
+  (client: DynamoDBClient) =>
+  (address: string): TaskEither<AppError, any[]> =>
+    te.tryCatch(
+      async () => {
+        const query = new ScanCommand({
+          TableName: voterTable,
+          Limit: 1,
+          ExpressionAttributeValues: {
+            ":address": { S: address },
+          },
+          FilterExpression: "address = :address",
+        });
+        const res = await client.send(query);
+        const marshalledRes: any = res.Items.map((item) => {
+          return unmarshall(item);
+        });
+
+        return marshalledRes;
+      },
+      (e) => {
+        console.log(e);
+        return {
+          statusCode: StatusCodes.BAD_GATEWAY,
+          message: "Voter by address lookup failed",
+        };
+      }
+    );
+
+const rawVotersToVoters = (d: any): TaskEither<AppError, IVoter[]> =>
+  pipe(
+    te.fromEither(Voters.decode(d)),
+    te.mapLeft(() => ({
+      statusCode: StatusCodes.BAD_GATEWAY,
+      message: "Error decoding ddb voters",
+    }))
+  );
+
+const votersToVoter = (voters: IVoter[]): TaskEither<AppError, IVoter> =>
+  voters.length > 0
+    ? te.right(voters[0])
+    : te.left({
+        statusCode: StatusCodes.NOT_FOUND,
+        message: "voter is not found in database",
+      });
 
 const doesVoterExist =
   (tableName: string) =>
@@ -198,24 +264,27 @@ const voterToLastRedeemed =
             (provider) =>
               new ethers.Contract(contractAddress, abi.abi, provider)
           )(nodeUrl);
-          return await contract.lastRedeemed();
+          return await contract.lastRedeemed(voter.address);
         }
       },
-      () => ({
-        statusCode: StatusCodes.BAD_GATEWAY,
-        message: "Error loading last redeemed timestamp from chain",
-      })
+      (e) => {
+        console.log(e);
+        return {
+          statusCode: StatusCodes.BAD_GATEWAY,
+          message: "Error loading last redeemed timestamp from chain",
+        };
+      }
     );
 
 const getVotesFrom =
-  (tableName: string) =>
+  (voteTableName: string) =>
   (client: DynamoDBClient) =>
   (voter: IVoter) =>
   (from: number): TaskEither<AppError, any[]> =>
     te.tryCatch(
       async () => {
         const query = new QueryCommand({
-          TableName: tableName,
+          TableName: voteTableName,
           ExpressionAttributeValues: {
             ":from": { N: from + "" },
             ":id": { S: voter.id },
@@ -241,9 +310,9 @@ const getVotesFrom =
       }
     );
 
-const decodeVotes = (rawVotes: any[]): TaskEither<AppError, IVote[]> =>
+const decodeVotes = (d: any[]): TaskEither<AppError, IVote[]> =>
   pipe(
-    te.fromEither(Votes.decode(rawVotes)),
+    te.fromEither(Votes.decode(d)),
     te.mapLeft(() => ({
       statusCode: StatusCodes.BAD_GATEWAY,
       message: "Error decoding DDB votes response ",
@@ -251,6 +320,18 @@ const decodeVotes = (rawVotes: any[]): TaskEither<AppError, IVote[]> =>
   );
 
 const countVoterVotes = (votes: IVote[]): number => votes.length;
+
+const countVotesFrom =
+  (tableName: string) =>
+  (client: DynamoDBClient) =>
+  (voter: IVoter) =>
+  (from: number): TaskEither<AppError, number> =>
+    pipe(
+      te.of(from),
+      te.chain(getVotesFrom(tableName)(client)(voter)),
+      te.chain(decodeVotes),
+      te.map(countVoterVotes)
+    );
 
 const voterToVoterResp =
   (nodeUrl: string) =>
@@ -261,10 +342,8 @@ const voterToVoterResp =
     pipe(
       te.of(voter),
       te.chain(voterToLastRedeemed(nodeUrl)(contractAddress)),
-      te.chain(getVotesFrom(tableName)(client)(voter)),
-      te.chain(decodeVotes),
-      te.map(countVoterVotes),
-      te.map((canRedeem) => ({
+      te.chain(countVotesFrom(tableName)(client)(voter)),
+      te.map((canRedeem: number) => ({
         firstName: voter.firstName,
         canRedeem,
         address: voter.address || null,
@@ -326,6 +405,62 @@ const saveVote =
       })
     );
 
+const toAddress = (data: any): TaskEither<AppError, string> =>
+  data.address
+    ? te.right(data.address)
+    : te.left({
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "address is missing from request body",
+      });
+
+const toRedeemReq = (req: HandlerEvent): TaskEither<AppError, IRedeemReq> =>
+  pipe(
+    te.fromEither(RedeemReq.decode(req.queryStringParameters)),
+    te.mapLeft((e) => {
+      console.log(e);
+      return {
+        statusCode: StatusCodes.BAD_REQUEST,
+        message: "Error decoding redeem query string",
+      };
+    })
+  );
+
+const setAddressOnce =
+  (voterTable: string) =>
+  (client: DynamoDBClient) =>
+  (voter: IVoter) =>
+  (address: string): TaskEither<AppError, IVoter> =>
+    te.tryCatch(
+      async () => {
+        if (voter.address) {
+          return voter;
+        } else {
+          const updateItemCommand = new UpdateItemCommand({
+            TableName: voterTable,
+            Key: {
+              id: { S: voter.id },
+            },
+            UpdateExpression: "set address = :address",
+            ExpressionAttributeValues: {
+              ":address": { S: address },
+            },
+          });
+          await client.send(updateItemCommand);
+          return {
+            ...voter,
+            address,
+          };
+        }
+      },
+      (e) => {
+        console.log(e);
+        return {
+          statusCode: StatusCodes.BAD_GATEWAY,
+          message: "Saving address to database failed",
+        };
+      }
+    );
+
 export const getVoteResp =
   (googleClientId: string) =>
   (voterTableName: string) =>
@@ -371,6 +506,79 @@ export const getVoterResp =
       te.chain(authVoter(googleClientId)(voterTableName)(client)),
       te.chain(
         voterToVoterResp(nodeUrl)(contractAddress)(voteTableName)(client)
+      ),
+      te.fold(
+        (err) =>
+          task.of({
+            statusCode: err.statusCode,
+            body: JSON.stringify(err.message),
+          }),
+        (res) =>
+          task.of({
+            statusCode: StatusCodes.OK,
+            body: JSON.stringify(res),
+          })
+      )
+    )();
+
+export const setAddressResp =
+  (googleClientId: string) =>
+  (voterTableName: string) =>
+  (client: DynamoDBClient) =>
+  async (req: HandlerEvent) =>
+    await pipe(
+      te.of(req),
+      te.chain(authVoter(googleClientId)(voterTableName)(client)),
+      te.chain((voter: IVoter) =>
+        pipe(
+          te.of(req),
+          te.chain(toBody),
+          te.chain(toAddress),
+          te.chain(setAddressOnce(voterTableName)(client)(voter))
+        )
+      ),
+      te.map((voter) => voter.address),
+      te.fold(
+        (err) =>
+          task.of({
+            statusCode: err.statusCode,
+            body: JSON.stringify(err.message),
+          }),
+        (res) =>
+          task.of({
+            statusCode: StatusCodes.OK,
+            body: JSON.stringify({ address: res }),
+          })
+      )
+    )();
+
+const toRedeemResp =
+  (address: string) =>
+  (from: number) =>
+  (quantity: number): IRedeemResp => ({
+    address,
+    quantity,
+    from,
+  });
+
+export const getRedeemResp =
+  (voterTableName: string) =>
+  (voteTableName: string) =>
+  (client: DynamoDBClient) =>
+  async (req: HandlerEvent) =>
+    await pipe(
+      toRedeemReq(req),
+      te.chain(({ address, from }) =>
+        pipe(
+          te.of(address),
+          te.chain(addressToRawVoters(voterTableName)(client)),
+          te.chain(rawVotersToVoters),
+          te.chain(votersToVoter),
+          te.chain((voter) =>
+            pipe(countVotesFrom(voteTableName)(client)(voter)(from))
+          ),
+          te.map(toRedeemResp(address)(from))
+        )
       ),
       te.fold(
         (err) =>

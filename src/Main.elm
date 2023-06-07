@@ -1,5 +1,6 @@
 port module Main exposing (Model, Msg(..), init, main, update, view)
 
+import AddressApi
 import Asset
 import Bill as Bill
 import BillMetadata exposing (BillMetadata, BillMetadataRes)
@@ -7,7 +8,7 @@ import Browser exposing (UrlRequest)
 import Browser.Navigation as Nav
 import CongressApi
 import Html.Styled exposing (Attribute, Html, a, button, div, img, text, toUnstyled)
-import Html.Styled.Attributes exposing (class, css, href, src)
+import Html.Styled.Attributes exposing (class, css, disabled, href, src)
 import Html.Styled.Events exposing (onClick)
 import Http as Http exposing (Error(..))
 import Json.Encode as Encode
@@ -21,10 +22,19 @@ import VoterApi as Voter exposing (Voter)
 port getAuthToken : String -> Cmd msg
 
 
+port connectWallet : String -> Cmd msg
+
+
 port authTokenSuccess : (String -> msg) -> Sub msg
 
 
 port authTokenFail : (String -> msg) -> Sub msg
+
+
+port walletError : (String -> msg) -> Sub msg
+
+
+port walletFound : (String -> msg) -> Sub msg
 
 
 
@@ -41,6 +51,13 @@ type Auth
     | SigningIn
     | ValidatingAuth String
     | SignedIn Voter
+
+
+type WalletStatus
+    = WalletNotConnected
+    | WalletConnecting
+    | WalletConnectionError String
+    | WalletConnected String
 
 
 authToMaybe : Auth -> Maybe String
@@ -66,6 +83,7 @@ type alias Model =
     , route : Route
     , key : Nav.Key
     , creds : Maybe String
+    , wallet : WalletStatus
     }
 
 
@@ -87,6 +105,7 @@ init env url key =
       , route = Route.fromUrl url
       , key = key
       , creds = Nothing
+      , wallet = WalletNotConnected
       }
     , Http.get
         { url = CongressApi.url env.apiKey
@@ -155,6 +174,10 @@ type Msg
     | AuthTokenSuccess String
     | AuthTokenFail String
     | ConnectWallet
+    | WalletFound String
+    | WalletError String
+    | GotAddrResp (Result Http.Error AddressApi.Address)
+    | ClaimTokens
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -291,7 +314,31 @@ update msg model =
             )
 
         ConnectWallet ->
+            ( { model | wallet = WalletConnecting }, connectWallet "" )
+
+        WalletFound addr ->
+            ( { model | wallet = WalletConnected addr }
+            , AddressApi.request
+                GotAddrResp
+                (model.creds
+                    |> Maybe.withDefault ""
+                )
+                addr
+            )
+
+        WalletError str ->
+            ( { model | wallet = WalletConnectionError str }, Cmd.none )
+
+        ClaimTokens ->
             ( model, Cmd.none )
+
+        GotAddrResp result ->
+            case result of
+                Ok res ->
+                    ( { model | wallet = WalletConnected res.address }, Cmd.none )
+
+                Err _ ->
+                    ( { model | wallet = WalletConnectionError "Unapproved wallet" }, Cmd.none )
 
 
 
@@ -350,26 +397,6 @@ homeView model =
                 ]
 
         SignedIn voter ->
-            let
-                redeemView =
-                    case voter.canRedeem of
-                        0 ->
-                            div [] []
-
-                        n ->
-                            div [] <|
-                                [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "You also have " ++ String.fromInt n ++ " tokens to redeem. Connect a wallet  to get them!" ]
-                                , brandedButton Nothing
-                                    [ onClick ConnectWallet
-                                    , css
-                                        [ T.px_4
-                                        , T.py_2
-                                        ]
-                                    ]
-                                    [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
-                                    "Connect Wallet"
-                                ]
-            in
             div []
                 [ div [] <|
                     [ div
@@ -388,14 +415,78 @@ homeView model =
                         []
                         "Vote now"
                     ]
-                , redeemView
+                , case voter.canRedeem of
+                    0 ->
+                        div [] []
+
+                    _ ->
+                        redeemView model voter
                 ]
 
         SignInFailed _ ->
             div [] [ text "sign in failed" ]
 
         _ ->
-            div [] [ text "Signing in..." ]
+            div [] [ text "Checking auth..." ]
+
+
+redeemView : Model -> Voter -> Html Msg
+redeemView model voter =
+    let
+        tokens =
+            String.fromInt voter.canRedeem
+    in
+    div [] <|
+        [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "You also have " ++ tokens ++ " tokens to redeem. Claim them now!" ]
+        , case model.wallet of
+            WalletNotConnected ->
+                brandedButton Nothing
+                    [ onClick ConnectWallet
+                    , css
+                        [ T.px_4
+                        , T.py_2
+                        ]
+                    ]
+                    [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                    "Connect Wallet"
+
+            WalletConnecting ->
+                brandedButton Nothing
+                    [ disabled True
+                    , css
+                        [ T.px_4
+                        , T.py_2
+                        ]
+                    ]
+                    [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                    "Connecting Wallet"
+
+            WalletConnectionError err ->
+                div []
+                    [ brandedButton Nothing
+                        [ onClick ConnectWallet
+                        , css
+                            [ T.px_4
+                            , T.py_2
+                            ]
+                        ]
+                        [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                        "Connect Wallet"
+                    , div [ css [ T.prose_red, T.text_xs ] ] [ text err ]
+                    ]
+
+            WalletConnected addr ->
+                brandedButton Nothing
+                    [ onClick ClaimTokens
+                    , css
+                        [ T.px_4
+                        , T.py_2
+                        ]
+                    ]
+                    [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                <|
+                    "Claim tokens!"
+        ]
 
 
 yesNo : Bill.Model -> Html Msg
@@ -458,5 +549,5 @@ main =
         , update = update
         , onUrlRequest = UrlRequested
         , onUrlChange = UrlChanged
-        , subscriptions = \_ -> Sub.batch [ authTokenSuccess AuthTokenSuccess, authTokenFail AuthTokenFail ]
+        , subscriptions = \_ -> Sub.batch [ authTokenSuccess AuthTokenSuccess, authTokenFail AuthTokenFail, walletError WalletError, walletFound WalletFound ]
         }

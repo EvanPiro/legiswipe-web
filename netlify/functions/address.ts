@@ -1,13 +1,13 @@
 import { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
-import * as dotenv from "dotenv";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { getRedeemResp } from "./utils";
+import * as dotenv from "dotenv";
+import { setAddressResp } from "./utils";
 
 dotenv.config();
 
 const region = "us-east-1";
 const voterTableName = "voter";
-const voteTableName = "vote";
+const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const client = new DynamoDBClient({
   region,
   credentials: {
@@ -16,12 +16,7 @@ const client = new DynamoDBClient({
   },
 });
 
-const handler: Handler = async (
-  event: HandlerEvent,
-  context: HandlerContext
-) => {
-  console.log(event.queryStringParameters);
-  return await getRedeemResp(voterTableName)(voteTableName)(client)(event);
-};
+const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
+  await setAddressResp(googleClientId)(voterTableName)(client)(event);
 
 export { handler };
