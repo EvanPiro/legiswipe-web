@@ -98,23 +98,28 @@ type alias Env =
     { apiKey : String, googleClientId : String }
 
 
+initModel : Env -> Url.Url -> Nav.Key -> Model
+initModel env url key =
+    { activeBill = Nothing
+    , bills = []
+    , verdicts = []
+    , loading = True
+    , next = ""
+    , env = env
+    , feedback = ""
+    , showSponsor = False
+    , auth = SignedOut
+    , route = Route.fromUrl url
+    , key = key
+    , creds = Nothing
+    , wallet = WalletNotConnected
+    , claimTokensStatus = NotClaimed
+    }
+
+
 init : Env -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init env url key =
-    ( { activeBill = Nothing
-      , bills = []
-      , verdicts = []
-      , loading = True
-      , next = ""
-      , env = env
-      , feedback = ""
-      , showSponsor = False
-      , auth = SignedOut
-      , route = Route.fromUrl url
-      , key = key
-      , creds = Nothing
-      , wallet = WalletNotConnected
-      , claimTokensStatus = NotClaimed
-      }
+    ( initModel env url key
     , Http.get
         { url = CongressApi.url env.apiKey
         , expect = Http.expectJson GotBills BillMetadata.decoder
@@ -200,7 +205,7 @@ update msg model =
             in
             case Route.fromUrl url of
                 Route.Home ->
-                    ( { model | auth = ValidatingAuth creds, route = Route.Home }, Voter.request GotVoter creds )
+                    ( { model | auth = ValidatingAuth creds, route = Route.Home, claimTokensStatus = NotClaimed }, Voter.request GotVoter creds )
 
                 route ->
                     ( { model | route = route }, Cmd.none )
@@ -495,7 +500,7 @@ redeemView model voter =
                         ]
                         [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
                         "Connect Wallet"
-                    , div [ css [ T.prose_red, T.text_xs ] ] [ text err ]
+                    , div [ css [ T.prose_red, T.text_xs, T.mt_3 ] ] [ text err ]
                     ]
                 ]
 
@@ -529,22 +534,25 @@ claimTokensView model voter =
                 ]
 
         Claimed ->
-            div [] [ text "Tokens claimed successfully!" ]
+            div [ css [ T.my_5 ] ] [ text "Tokens claimed successfully!" ]
 
         Claiming ->
-            brandedButton Nothing
-                [ disabled True
-                , css
-                    [ T.px_4
-                    , T.py_2
+            div []
+                [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "Just one moment please." ]
+                , brandedButton Nothing
+                    [ disabled True
+                    , css
+                        [ T.px_4
+                        , T.py_2
+                        ]
                     ]
+                    [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                  <|
+                    "Claiming tokens..."
                 ]
-                [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
-            <|
-                "Claiming Tokens..."
 
         ClaimFailed str ->
-            div []
+            div [ css [ T.my_5, T.px_3 ] ]
                 [ dialogue
                 , brandedButton Nothing
                     [ onClick ClaimTokens
@@ -556,7 +564,7 @@ claimTokensView model voter =
                     [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
                   <|
                     "Claim tokens!"
-                , div [] [ text str ]
+                , div [ css [ T.my_5, T.px_3 ] ] [ text str ]
                 ]
 
 
