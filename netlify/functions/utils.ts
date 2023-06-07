@@ -265,6 +265,7 @@ const voterToLastRedeemed =
               new ethers.Contract(contractAddress, abi.abi, provider)
           )(nodeUrl);
           const res = await contract.lastRedeemed(voter.address);
+          console.log(res.toNumber());
           return res.toNumber();
         }
       },
@@ -284,6 +285,10 @@ const getVotesFrom =
   (from: number): TaskEither<AppError, any[]> =>
     te.tryCatch(
       async () => {
+        console.log("last redeemed on chain: ", from);
+        const now = Math.floor(new Date().getTime() / 1000);
+        console.log("now time: ", now);
+        console.log("difference: ", now - from);
         const query = new QueryCommand({
           TableName: voteTableName,
           ExpressionAttributeValues: {
@@ -381,7 +386,7 @@ const toVote =
   (voter: IVoter) =>
   (voteReq: IVoteReq): IVote => ({
     voterId: voter.id,
-    timestamp: Math.round(new Date().getTime() / 1000),
+    timestamp: Math.floor(new Date().getTime() / 1000),
     billId: voteReq.billId,
     verdict: voteReq.verdict,
     bill: voteReq.bill,

@@ -538,7 +538,7 @@ claimTokensView model voter =
 
         Claiming ->
             div []
-                [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "Just one moment please." ]
+                [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "Just one moment please" ]
                 , brandedButton Nothing
                     [ disabled True
                     , css
