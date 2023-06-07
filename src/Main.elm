@@ -445,7 +445,18 @@ homeView model =
                 ]
 
         SignInFailed _ ->
-            div [] [ text "sign in failed" ]
+            div []
+                [ div [ css [ T.my_5, T.px_3 ] ] [ text "Sign in failed. Please try again." ]
+                , brandedButton Nothing
+                    [ onClick SignIn
+                    , css
+                        [ T.px_4
+                        , T.py_2
+                        ]
+                    ]
+                    [ img [ src (Asset.toPath Asset.googleLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                    "Sign in"
+                ]
 
         _ ->
             div [] [ text "Checking auth..." ]
