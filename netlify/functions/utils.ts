@@ -156,7 +156,7 @@ const addressToRawVoters =
           TableName: voterTable,
           Limit: 1,
           ExpressionAttributeValues: {
-            ":address": { S: address },
+            ":address": { S: address.toLowerCase() },
           },
           FilterExpression: "address = :address",
         });
@@ -440,9 +440,9 @@ const setAddressOnce =
             Key: {
               id: { S: voter.id },
             },
-            UpdateExpression: "set address = :address",
+            UpdateExpression: "SET address = :address",
             ExpressionAttributeValues: {
-              ":address": { S: address },
+              ":address": { S: address.toLowerCase() },
             },
           });
           await client.send(updateItemCommand);

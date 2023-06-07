@@ -1,2 +1,2 @@
 export const tokenContractAddress =
-  "0x61ad6878550068dFbDdA11452FA2e18F514D4b18";
+  "0x3d48FfEd8B2805B6da60cA1CE2d3D95462f5d4Cd";

@@ -65,8 +65,8 @@ app.ports.claimTokens.subscribe(async function () {
         abi.abi,
         provider
       ).connect(signer);
-      contract
-        .executeRequest(address, 200000)
+      await contract
+        .executeRequest(address, 200000, { gasLimit: 3500000 })
         .then(async (res) => {
           await res.wait();
           app.ports.claimTokensSuccess.send("");
