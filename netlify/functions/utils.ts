@@ -18,7 +18,7 @@ import {
 } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import abi from "../../src/tokenAbi";
-import { ethers } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { flow, pipe } from "fp-ts/function";
 
 interface AppError {
@@ -264,7 +264,8 @@ const voterToLastRedeemed =
             (provider) =>
               new ethers.Contract(contractAddress, abi.abi, provider)
           )(nodeUrl);
-          return await contract.lastRedeemed(voter.address);
+          const res = await contract.lastRedeemed(voter.address);
+          return res.toNumber();
         }
       },
       (e) => {
@@ -380,7 +381,7 @@ const toVote =
   (voter: IVoter) =>
   (voteReq: IVoteReq): IVote => ({
     voterId: voter.id,
-    timestamp: new Date().getTime(),
+    timestamp: Math.round(new Date().getTime() / 1000),
     billId: voteReq.billId,
     verdict: voteReq.verdict,
     bill: voteReq.bill,
