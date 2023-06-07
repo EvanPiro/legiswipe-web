@@ -2,6 +2,7 @@ import { Handler, HandlerEvent, HandlerContext } from "@netlify/functions";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import * as dotenv from "dotenv";
 import { getVoterResp } from "./utils";
+import { tokenContractAddress } from "../../src/config";
 
 dotenv.config();
 
@@ -10,7 +11,6 @@ const voterTableName = "voter";
 const voteTableName = "vote";
 const nodeUrl = process.env.SEPOLIA_RPC_URL;
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const contractAddress = "0x9722bAC4E338ecBA3e448b72496663a7c8F53dB7";
 const client = new DynamoDBClient({
   region,
   credentials: {
@@ -20,8 +20,8 @@ const client = new DynamoDBClient({
 });
 
 const handler: Handler = async (event: HandlerEvent, context: HandlerContext) =>
-  await getVoterResp(nodeUrl)(contractAddress)(googleClientId)(voterTableName)(
-    voteTableName
-  )(client)(event);
+  await getVoterResp(nodeUrl)(tokenContractAddress)(googleClientId)(
+    voterTableName
+  )(voteTableName)(client)(event);
 
 export { handler };

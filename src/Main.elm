@@ -25,6 +25,9 @@ port getAuthToken : String -> Cmd msg
 port connectWallet : String -> Cmd msg
 
 
+port claimTokens : String -> Cmd msg
+
+
 port authTokenSuccess : (String -> msg) -> Sub msg
 
 
@@ -35,6 +38,12 @@ port walletError : (String -> msg) -> Sub msg
 
 
 port walletFound : (String -> msg) -> Sub msg
+
+
+port claimTokensFail : (String -> msg) -> Sub msg
+
+
+port claimTokensSuccess : (String -> msg) -> Sub msg
 
 
 
@@ -60,14 +69,11 @@ type WalletStatus
     | WalletConnected String
 
 
-authToMaybe : Auth -> Maybe String
-authToMaybe auth =
-    case auth of
-        ValidatingAuth cred ->
-            Just cred
-
-        _ ->
-            Nothing
+type ClaimTokensStatus
+    = NotClaimed
+    | Claimed
+    | Claiming
+    | ClaimFailed String
 
 
 type alias Model =
@@ -84,6 +90,7 @@ type alias Model =
     , key : Nav.Key
     , creds : Maybe String
     , wallet : WalletStatus
+    , claimTokensStatus : ClaimTokensStatus
     }
 
 
@@ -106,6 +113,7 @@ init env url key =
       , key = key
       , creds = Nothing
       , wallet = WalletNotConnected
+      , claimTokensStatus = NotClaimed
       }
     , Http.get
         { url = CongressApi.url env.apiKey
@@ -178,6 +186,8 @@ type Msg
     | WalletError String
     | GotAddrResp (Result Http.Error AddressApi.Address)
     | ClaimTokens
+    | ClaimTokenSuccess String
+    | ClaimTokensFail String
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -329,9 +339,6 @@ update msg model =
         WalletError str ->
             ( { model | wallet = WalletConnectionError str }, Cmd.none )
 
-        ClaimTokens ->
-            ( model, Cmd.none )
-
         GotAddrResp result ->
             case result of
                 Ok res ->
@@ -339,6 +346,15 @@ update msg model =
 
                 Err _ ->
                     ( { model | wallet = WalletConnectionError "Unapproved wallet" }, Cmd.none )
+
+        ClaimTokens ->
+            ( { model | claimTokensStatus = Claiming }, claimTokens "" )
+
+        ClaimTokenSuccess _ ->
+            ( { model | claimTokensStatus = Claimed }, Cmd.none )
+
+        ClaimTokensFail str ->
+            ( { model | claimTokensStatus = ClaimFailed str }, Cmd.none )
 
 
 
@@ -435,12 +451,15 @@ redeemView model voter =
     let
         tokens =
             String.fromInt voter.canRedeem
+
+        dialogue =
+            div [ css [ T.my_5, T.px_3 ] ] [ text <| "You also have " ++ tokens ++ " tokens to redeem. Claim them now!" ]
     in
     div [] <|
-        [ div [ css [ T.my_5, T.px_3 ] ] [ text <| "You also have " ++ tokens ++ " tokens to redeem. Claim them now!" ]
-        , case model.wallet of
+        case model.wallet of
             WalletNotConnected ->
-                brandedButton Nothing
+                [ dialogue
+                , brandedButton Nothing
                     [ onClick ConnectWallet
                     , css
                         [ T.px_4
@@ -449,9 +468,11 @@ redeemView model voter =
                     ]
                     [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
                     "Connect Wallet"
+                ]
 
             WalletConnecting ->
-                brandedButton Nothing
+                [ dialogue
+                , brandedButton Nothing
                     [ disabled True
                     , css
                         [ T.px_4
@@ -460,9 +481,11 @@ redeemView model voter =
                     ]
                     [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
                     "Connecting Wallet"
+                ]
 
             WalletConnectionError err ->
-                div []
+                [ dialogue
+                , div []
                     [ brandedButton Nothing
                         [ onClick ConnectWallet
                         , css
@@ -474,9 +497,26 @@ redeemView model voter =
                         "Connect Wallet"
                     , div [ css [ T.prose_red, T.text_xs ] ] [ text err ]
                     ]
+                ]
 
             WalletConnected addr ->
-                brandedButton Nothing
+                [ claimTokensView model voter ]
+
+
+claimTokensView : Model -> Voter -> Html Msg
+claimTokensView model voter =
+    let
+        tokens =
+            String.fromInt voter.canRedeem
+
+        dialogue =
+            div [ css [ T.my_5, T.px_3 ] ] [ text <| "You also have " ++ tokens ++ " tokens to redeem. Claim them now!" ]
+    in
+    case model.claimTokensStatus of
+        NotClaimed ->
+            div []
+                [ dialogue
+                , brandedButton Nothing
                     [ onClick ClaimTokens
                     , css
                         [ T.px_4
@@ -484,9 +524,40 @@ redeemView model voter =
                         ]
                     ]
                     [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
-                <|
+                  <|
                     "Claim tokens!"
-        ]
+                ]
+
+        Claimed ->
+            div [] [ text "Tokens claimed successfully!" ]
+
+        Claiming ->
+            brandedButton Nothing
+                [ disabled True
+                , css
+                    [ T.px_4
+                    , T.py_2
+                    ]
+                ]
+                [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+            <|
+                "Claiming Tokens..."
+
+        ClaimFailed str ->
+            div []
+                [ dialogue
+                , brandedButton Nothing
+                    [ onClick ClaimTokens
+                    , css
+                        [ T.px_4
+                        , T.py_2
+                        ]
+                    ]
+                    [ img [ src (Asset.toPath Asset.metamaskLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                  <|
+                    "Claim tokens!"
+                , div [] [ text str ]
+                ]
 
 
 yesNo : Bill.Model -> Html Msg
@@ -549,5 +620,14 @@ main =
         , update = update
         , onUrlRequest = UrlRequested
         , onUrlChange = UrlChanged
-        , subscriptions = \_ -> Sub.batch [ authTokenSuccess AuthTokenSuccess, authTokenFail AuthTokenFail, walletError WalletError, walletFound WalletFound ]
+        , subscriptions =
+            \_ ->
+                Sub.batch
+                    [ authTokenSuccess AuthTokenSuccess
+                    , authTokenFail AuthTokenFail
+                    , walletError WalletError
+                    , walletFound WalletFound
+                    , claimTokensFail ClaimTokensFail
+                    , claimTokensSuccess ClaimTokenSuccess
+                    ]
         }

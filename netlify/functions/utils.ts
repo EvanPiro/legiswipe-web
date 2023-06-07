@@ -561,6 +561,7 @@ const toRedeemResp =
     from,
   });
 
+// @Todo `from` is sneaking in as a string when it should be a number
 export const getRedeemResp =
   (voterTableName: string) =>
   (voteTableName: string) =>

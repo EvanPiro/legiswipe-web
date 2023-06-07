@@ -3,6 +3,8 @@ import { Elm } from "./Main.elm";
 import * as serviceWorker from "./serviceWorker";
 import * as dotenv from "dotenv";
 import { ethers } from "ethers";
+import abi from "./tokenAbi";
+import { tokenContractAddress } from "./config";
 
 dotenv.config();
 
@@ -44,6 +46,41 @@ app.ports.connectWallet.subscribe(async function () {
     console.log(e);
     console.log("wallet not detected");
     app.ports.walletError.send(
+      "Wallet not detected. Please set up a browser wallet to redeem tokens."
+    );
+  }
+});
+
+app.ports.claimTokens.subscribe(async function () {
+  try {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const { chainId } = await provider.getNetwork();
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+    if (chainId === 11155111) {
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(
+        tokenContractAddress,
+        abi.abi,
+        provider
+      ).connect(signer);
+      contract
+        .executeRequest(address, 200000)
+        .then(async (res) => {
+          await res.wait();
+          app.ports.claimTokensSuccess.send("");
+        })
+        .catch((err) => {
+          console.log(err);
+          app.ports.claimTokensFail.send("transaction verification failed");
+        });
+    } else {
+      app.ports.claimTokensFail.send("Please switch network to Sepolia");
+    }
+  } catch (e) {
+    console.log(e);
+    app.ports.claimTokensFail.send(
       "Wallet not detected. Please set up a browser wallet to redeem tokens."
     );
   }
