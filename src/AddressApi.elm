@@ -7,7 +7,7 @@ import Json.Encode as Encode
 
 path : String
 path =
-    "/.netlify/functions/address"
+    "/.netlify/functions/setAddress"
 
 
 type alias Address =
