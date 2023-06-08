@@ -16,19 +16,6 @@ const app = Elm.Main.init({
   },
 });
 
-{
-  // The "any" network will allow spontaneous network changes
-  const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-  provider.on("network", (newNetwork, oldNetwork) => {
-    // When a Provider makes its initial connection, it emits a "network"
-    // event with a null oldNetwork along with the newNetwork. So, if the
-    // oldNetwork exists, it represents a changing network
-    if (oldNetwork) {
-      window.location.reload();
-    }
-  });
-}
-
 app.ports.connectWallet.subscribe(async function () {
   try {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -41,6 +28,22 @@ app.ports.connectWallet.subscribe(async function () {
       app.ports.walletFound.send(address);
     } else {
       app.ports.walletError.send("Please switch network to Sepolia");
+    }
+
+    {
+      // The "any" network will allow spontaneous network changes
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum,
+        "any"
+      );
+      provider.on("network", (newNetwork, oldNetwork) => {
+        // When a Provider makes its initial connection, it emits a "network"
+        // event with a null oldNetwork along with the newNetwork. So, if the
+        // oldNetwork exists, it represents a changing network
+        if (oldNetwork) {
+          window.location.reload();
+        }
+      });
     }
   } catch (e) {
     console.log(e);
@@ -65,10 +68,11 @@ app.ports.claimTokens.subscribe(async function () {
         abi.abi,
         provider
       ).connect(signer);
+      console.log(address);
       await contract
-        .executeRequest(address, 300000, { gasLimit: 3500000 })
+        .executeRequest(address, 5500000, { gasLimit: 5500000 })
         .then(async (res) => {
-          await res.wait();
+          await res.wait(2);
           app.ports.claimTokensSuccess.send("");
         })
         .catch((err) => {
