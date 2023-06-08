@@ -1,4 +1,4 @@
-module VoterApi exposing (Voter, decoder, encode, path, request)
+module VoterApi exposing (Voter, blank, decoder, encode, path, request)
 
 import Http
 import Json.Decode exposing (Decoder, field, int, map3, maybe, string)
@@ -15,6 +15,11 @@ type alias Voter =
     , canRedeem : Int
     , address : Maybe String
     }
+
+
+blank : Voter
+blank =
+    { firstName = "", canRedeem = 1, address = Nothing }
 
 
 decoder : Decoder Voter

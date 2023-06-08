@@ -117,6 +117,29 @@ initModel env url key =
     }
 
 
+
+-- @Todo come up with better means to force specific state for development
+
+
+initModel_ : Env -> Url.Url -> Nav.Key -> Model
+initModel_ env url key =
+    { activeBill = Nothing
+    , bills = []
+    , verdicts = []
+    , loading = True
+    , next = ""
+    , env = env
+    , feedback = ""
+    , showSponsor = False
+    , auth = SignedIn Voter.blank
+    , route = Route.Home
+    , key = key
+    , creds = Nothing
+    , wallet = WalletNotConnected
+    , claimTokensStatus = NotClaimed
+    }
+
+
 init : Env -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init env url key =
     ( initModel env url key
@@ -428,11 +451,7 @@ homeView model =
                         ]
                         [ text <| "Welcome " ++ voter.firstName ++ "! There are bills awaiting your vote." ]
                     , brandedButton (Just <| Route.billToUrl <| Bill.blank "now" "see")
-                        [ css
-                            [ T.px_4
-                            , T.py_2
-                            ]
-                        ]
+                        []
                         []
                         "Vote now"
                     ]
@@ -449,10 +468,6 @@ homeView model =
                 [ div [ css [ T.my_5, T.px_3 ] ] [ text "Sign in failed. Please try again." ]
                 , brandedButton Nothing
                     [ onClick SignIn
-                    , css
-                        [ T.px_4
-                        , T.py_2
-                        ]
                     ]
                     [ img [ src (Asset.toPath Asset.googleLogo), css [ T.text_base, T.mr_3 ] ] [] ]
                     "Sign in"
@@ -609,6 +624,8 @@ brandedButton linked attrs nodes str =
                 , T.items_center
                 , T.justify_center
                 , T.cursor_pointer
+                , T.w_48
+                , T.h_12
                 ]
             ]
                 ++ attrs
