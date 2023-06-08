@@ -146,7 +146,7 @@ view showSponsor sponsorShow bill =
                     sponsorsView bill.sponsors
     in
     div []
-        [ h2 [] [ text bill.title ]
+        [ h2 [ css [ T.justify_center, T.leading_relaxed ] ] [ text bill.title ]
         , sponsor
         , div [ css [ T.my_4 ] ] [ text <| "Introduced " ++ bill.introducedDate ]
         , div [ css [ T.my_4 ] ] [ a [ href <| toUrl bill, target "_blank" ] [ text "🔗 More info" ] ]
