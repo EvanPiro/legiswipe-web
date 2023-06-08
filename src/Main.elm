@@ -405,7 +405,7 @@ homeView model =
     case model.auth of
         SignedOut ->
             div []
-                [ div [ css [ T.my_5, T.px_3 ] ] [ text "Participating in democracy one bill at a time." ]
+                [ div [ css [ T.my_5, T.px_3 ] ] [ text "Democracy, one bill at a time." ]
                 , brandedButton Nothing
                     [ onClick SignIn
                     , css
