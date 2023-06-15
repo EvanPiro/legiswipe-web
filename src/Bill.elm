@@ -1,4 +1,4 @@
-module Bill exposing (BillRes, Model, Sponsor, blank, decoder, encode, toBillId, toUrl, view)
+module Bill exposing (BillRes, Model, Sponsor, blank, decoder, encode, toBillId, toJsonFromIds, toUrl, view)
 
 import Html.Styled exposing (Html, a, button, div, h1, h2, h3, h4, p, span, text)
 import Html.Styled.Attributes exposing (class, css, href, target)
@@ -6,6 +6,7 @@ import Html.Styled.Events exposing (onClick)
 import Json.Decode exposing (Decoder, field, int, list, map, map2, map3, map4, map5, map6, map7, maybe, string)
 import Json.Encode as Encode exposing (encode, object)
 import Tailwind.Utilities as T
+import Url.Builder as Url
 
 
 type alias PolicyArea =
@@ -156,6 +157,36 @@ view showSponsor sponsorShow bill =
 toBillId : Model -> String
 toBillId model =
     String.fromInt model.congress ++ "-" ++ model.type_ ++ "-" ++ model.number
+
+
+toJsonUrl : String -> Model -> String
+toJsonUrl apiKey model =
+    Url.crossOrigin
+        "https://api.congress.gov"
+        [ "v3"
+        , "bill"
+        , String.fromInt model.congress
+        , String.toLower model.type_
+        , model.number
+        ]
+        [ Url.string "format" "json"
+        , Url.string "apiKey" apiKey
+        ]
+
+
+toJsonFromIds : String -> String -> String -> String
+toJsonFromIds apiKey type_ number =
+    Url.crossOrigin
+        "https://api.congress.gov"
+        [ "v3"
+        , "bill"
+        , String.fromInt 118
+        , String.toLower type_
+        , number
+        ]
+        [ Url.string "format" "json"
+        , Url.string "api_key" apiKey
+        ]
 
 
 toUrl : Model -> String

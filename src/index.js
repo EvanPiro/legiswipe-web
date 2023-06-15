@@ -92,7 +92,6 @@ app.ports.claimTokens.subscribe(async function () {
 
 app.ports.getAuthToken.subscribe(function (googleClientId) {
   console.log("log on clicked");
-  console.log(googleClientId);
   google.accounts.id.initialize({
     client_id: googleClientId,
     callback: function (obj) {
