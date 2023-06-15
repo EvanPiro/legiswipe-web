@@ -8,4 +8,16 @@ Swiping on legislation.
 
 ## Project Objectives
 
-Educate, engage, and reimagine political agency and concensus.
+Educate, engage, and reimagine political agency and consensus.
+
+## Run on Local
+
+To start the front-end service run:
+
+`elm-app start`.
+
+
+To start the API service run:
+
+`netlify dev`
+

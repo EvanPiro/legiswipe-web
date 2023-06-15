@@ -1,10 +1,10 @@
 module BillMetadata exposing (BillMetadata, BillMetadataRes, decoder)
 
-import Json.Decode exposing (Decoder, field, list, map, map2, map3, string)
+import Json.Decode exposing (Decoder, field, list, map, map2, map3, map4, string)
 
 
 type alias BillMetadata =
-    { title : String, url : String, number : String }
+    { title : String, url : String, number : String, type_ : String }
 
 
 type alias BillMetadataRes =
@@ -19,10 +19,11 @@ type alias Pagination =
 
 billDecoder : Decoder BillMetadata
 billDecoder =
-    map3 BillMetadata
+    map4 BillMetadata
         (field "title" string)
         (field "url" string)
         (field "number" string)
+        (field "type" string)
 
 
 billListDecoder : Decoder (List BillMetadata)

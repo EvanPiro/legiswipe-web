@@ -76,8 +76,15 @@ type ClaimTokensStatus
     | ClaimFailed String
 
 
+type RequestedBill
+    = BillFound Bill.Model
+    | BillLoading
+    | BillError
+    | BillNotLoaded
+
+
 type alias Model =
-    { activeBill : Maybe Bill.Model
+    { activeBill : RequestedBill
     , bills : List BillMetadata
     , verdicts : List Verdict
     , loading : Bool
@@ -100,7 +107,7 @@ type alias Env =
 
 initModel : Env -> Url.Url -> Nav.Key -> Model
 initModel env url key =
-    { activeBill = Nothing
+    { activeBill = BillNotLoaded
     , bills = []
     , verdicts = []
     , loading = True
@@ -123,7 +130,7 @@ initModel env url key =
 
 initModel_ : Env -> Url.Url -> Nav.Key -> Model
 initModel_ env url key =
-    { activeBill = Nothing
+    { activeBill = BillNotLoaded
     , bills = []
     , verdicts = []
     , loading = True
@@ -142,18 +149,24 @@ initModel_ env url key =
 
 init : Env -> Url.Url -> Nav.Key -> ( Model, Cmd Msg )
 init env url key =
+    let
+        cmd =
+            case Route.fromUrl url of
+                Route.Bill type_ number ->
+                    getBillFromIds env.apiKey type_ number
+
+                _ ->
+                    getFirstBills env.apiKey
+    in
     ( initModel env url key
-    , Http.get
-        { url = CongressApi.url env.apiKey
-        , expect = Http.expectJson GotBills BillMetadata.decoder
-        }
+    , cmd
     )
 
 
-getFirstBills : Model -> Cmd Msg
-getFirstBills model =
+getFirstBills : String -> Cmd Msg
+getFirstBills apiKey =
     Http.get
-        { url = CongressApi.url model.env.apiKey
+        { url = CongressApi.url apiKey
         , expect = Http.expectJson GotBills BillMetadata.decoder
         }
 
@@ -189,6 +202,14 @@ getBill : String -> BillMetadata -> Cmd Msg
 getBill key { url } =
     Http.get
         { url = CongressApi.addKey key url
+        , expect = Http.expectJson GotBill Bill.decoder
+        }
+
+
+getBillFromIds : String -> String -> String -> Cmd Msg
+getBillFromIds key type_ number =
+    Http.get
+        { url = Bill.toJsonFromIds key type_ number
         , expect = Http.expectJson GotBill Bill.decoder
         }
 
@@ -230,6 +251,9 @@ update msg model =
                 Route.Home ->
                     ( { model | auth = ValidatingAuth creds, route = Route.Home, claimTokensStatus = NotClaimed }, Voter.request GotVoter creds )
 
+                Route.Bill type_ number ->
+                    ( { model | route = Route.Bill type_ number }, getBillFromIds model.env.apiKey type_ number )
+
                 route ->
                     ( { model | route = route }, Cmd.none )
 
@@ -261,7 +285,15 @@ update msg model =
                     ( { model | auth = SignInFailed "backend error" }, Cmd.none )
 
                 Ok voter ->
-                    ( { model | auth = SignedIn voter }, Cmd.none )
+                    case ( model.activeBill, model.bills, model.next ) of
+                        ( BillFound bill, _, _ ) ->
+                            ( { model | auth = SignedIn voter, loading = False }, Cmd.none )
+
+                        ( _, [], "" ) ->
+                            ( { model | auth = SignedIn voter }, getFirstBills model.env.apiKey )
+
+                        ( _, _, n ) ->
+                            ( { model | auth = SignedIn voter }, getNextBills model.env.apiKey n )
 
         ShowSponsor ->
             ( { model | showSponsor = True }, Cmd.none )
@@ -270,30 +302,24 @@ update msg model =
             ( model, Cmd.none )
 
         GotBills res ->
-            let
-                bills =
-                    res
-                        |> Result.map (\b -> b.bills)
-                        |> Result.withDefault []
+            case res of
+                Err _ ->
+                    ( { model | bills = [], next = "", feedback = "Bill request failed. Please try again later." }, Cmd.none )
 
-                next =
-                    res
-                        |> Result.map (\b -> b.pagination)
-                        |> Result.map (\b -> b.next)
-                        |> Result.withDefault ""
-
-                reqCmd =
-                    case List.head bills of
+                Ok metadata ->
+                    ( { model | bills = metadata.bills, next = metadata.pagination.next, activeBill = BillLoading }
+                    , case List.head metadata.bills of
                         Just bill ->
-                            getBill model.env.apiKey bill
+                            case model.route of
+                                Route.Bill type_ number ->
+                                    Nav.pushUrl model.key (Route.billIdsToUrl bill.type_ bill.number)
+
+                                _ ->
+                                    Cmd.none
 
                         _ ->
                             Cmd.none
-
-                newModel =
-                    { model | bills = bills, next = next }
-            in
-            ( newModel, reqCmd )
+                    )
 
         GotBill res ->
             case res of
@@ -305,14 +331,14 @@ update msg model =
                                     str
 
                                 _ ->
-                                    "other error"
+                                    "Oops! Looks like we can't find this bill."
                     in
-                    ( { model | feedback = errorStr }, Cmd.none )
+                    ( { model | activeBill = BillError, feedback = errorStr, loading = False }, Cmd.none )
 
                 Ok ok ->
                     let
                         newModel =
-                            { model | activeBill = Just ok.bill, showSponsor = False }
+                            { model | activeBill = BillFound ok.bill, showSponsor = False }
                     in
                     ( newModel, Cmd.none )
 
@@ -325,9 +351,12 @@ update msg model =
                     List.filter (\{ number } -> bill.number /= number) model.bills
 
                 reqCmd =
-                    case List.head newBills of
-                        Just billMetadata ->
-                            getBill model.env.apiKey billMetadata
+                    case ( List.head newBills, model.next ) of
+                        ( Just billMetadata, _ ) ->
+                            Nav.pushUrl model.key (Route.billIdsToUrl billMetadata.type_ billMetadata.number)
+
+                        ( _, "" ) ->
+                            getFirstBills model.env.apiKey
 
                         _ ->
                             getNextBills model.env.apiKey model.next
@@ -335,7 +364,7 @@ update msg model =
                 newModel =
                     { model
                         | bills = newBills
-                        , activeBill = Nothing
+                        , activeBill = BillNotLoaded
                         , loading = True
                         , verdicts = [ verdict ] ++ model.verdicts
                     }
@@ -392,15 +421,20 @@ update msg model =
 billView : Model -> Html Msg
 billView model =
     case model.activeBill of
-        Nothing ->
+        BillError ->
             div [ class "mt-1 mx-1 text-center" ]
-                [ text "Loading bill..."
+                [ text model.feedback
                 ]
 
-        Just bill ->
+        BillFound bill ->
             div [ class "mt-1 mx-1" ]
-                [ yesNo bill
+                [ authView False "Vote now!" model (\m voter -> yesNo bill)
                 , Bill.view ShowSponsor model.showSponsor bill
+                ]
+
+        _ ->
+            div [ class "mt-1 mx-1 text-center" ]
+                [ text "Loading bill..."
                 ]
 
 
@@ -411,7 +445,7 @@ view model =
         , div [ class "content", css [ T.text_center, T.my_3 ] ]
             [ case model.route of
                 Route.Home ->
-                    homeView model
+                    authView True "sign in" model voterView
 
                 Route.Bill _ _ ->
                     billView model
@@ -423,12 +457,50 @@ view model =
         ]
 
 
-homeView : Model -> Html Msg
-homeView model =
+voterView : Model -> Voter -> Html Msg
+voterView model voter =
+    div []
+        [ div [] <|
+            case model.bills of
+                [] ->
+                    [ div [] [ text "Looks like you voted on all the bills! Please check for more later" ] ]
+
+                x :: dx ->
+                    [ div
+                        [ css
+                            [ T.my_5
+                            , T.px_3
+                            ]
+                        ]
+                        [ text <| "Welcome " ++ voter.firstName ++ "! There are bills awaiting your vote." ]
+                    , brandedButton (Just <| Route.billIdsToUrl x.type_ x.number)
+                        []
+                        []
+                        "Vote now"
+                    ]
+        , case voter.canRedeem of
+            0 ->
+                div [] []
+
+            _ ->
+                redeemView model voter
+        ]
+
+
+authView : Bool -> String -> Model -> (Model -> Voter -> Html Msg) -> Html Msg
+authView showTagline btnCopy model authContent =
+    let
+        tagLine =
+            if showTagline then
+                div [ css [ T.my_5, T.px_3 ] ] [ text <| "Democracy, one bill at a time." ]
+
+            else
+                div [] []
+    in
     case model.auth of
         SignedOut ->
             div []
-                [ div [ css [ T.my_5, T.px_3 ] ] [ text "Democracy, one bill at a time." ]
+                [ tagLine
                 , brandedButton Nothing
                     [ onClick SignIn
                     , css
@@ -437,31 +509,11 @@ homeView model =
                         ]
                     ]
                     [ img [ src (Asset.toPath Asset.googleLogo), css [ T.text_base, T.mr_3 ] ] [] ]
-                    "Sign in"
+                    btnCopy
                 ]
 
         SignedIn voter ->
-            div []
-                [ div [] <|
-                    [ div
-                        [ css
-                            [ T.my_5
-                            , T.px_3
-                            ]
-                        ]
-                        [ text <| "Welcome " ++ voter.firstName ++ "! There are bills awaiting your vote." ]
-                    , brandedButton (Just <| Route.billToUrl <| Bill.blank "now" "see")
-                        []
-                        []
-                        "Vote now"
-                    ]
-                , case voter.canRedeem of
-                    0 ->
-                        div [] []
-
-                    _ ->
-                        redeemView model voter
-                ]
+            authContent model voter
 
         SignInFailed _ ->
             div []
@@ -474,7 +526,18 @@ homeView model =
                 ]
 
         _ ->
-            div [] [ text "Checking auth..." ]
+            div []
+                [ tagLine
+                , brandedButton Nothing
+                    [ disabled True
+                    , css
+                        [ T.px_4
+                        , T.py_2
+                        ]
+                    ]
+                    [ img [ src (Asset.toPath Asset.googleLogo), css [ T.text_base, T.mr_3 ] ] [] ]
+                    "Authenticating..."
+                ]
 
 
 redeemView : Model -> Voter -> Html Msg

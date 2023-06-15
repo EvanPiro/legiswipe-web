@@ -1,4 +1,12 @@
-module Route exposing (Route(..), billToUrl, fromUrl, route, toRoute, toUrlString)
+module Route exposing
+    ( Route(..)
+    , billIdsToUrl
+    , billToUrl
+    , fromUrl
+    , route
+    , toRoute
+    , toUrlString
+    )
 
 import Bill
 import Url exposing (Url)
@@ -16,6 +24,8 @@ route : Parser (Route -> a) a
 route =
     oneOf
         [ map Home top
+
+        -- /bill/<type>/<number>
         , map Bill (s "bill" </> string </> string)
         ]
 
@@ -48,3 +58,8 @@ toRoute string =
 billToUrl : Bill.Model -> String
 billToUrl bill =
     absolute [ "bill", bill.type_, bill.number ] []
+
+
+billIdsToUrl : String -> String -> String
+billIdsToUrl type_ number =
+    absolute [ "bill", type_, number ] []
