@@ -26,7 +26,7 @@ route =
         [ map Home top
 
         -- /bill/<type>/<number>
-        , map Bill (s "bill" </> string </> string)
+        , map Bill (s "bill" </> s "118" </> string </> string)
         ]
 
 
@@ -57,9 +57,9 @@ toRoute string =
 
 billToUrl : Bill.Model -> String
 billToUrl bill =
-    absolute [ "bill", bill.type_, bill.number ] []
+    absolute [ "bill", "118", bill.type_, bill.number ] []
 
 
 billIdsToUrl : String -> String -> String
 billIdsToUrl type_ number =
-    absolute [ "bill", type_, number ] []
+    absolute [ "bill", "118", type_, number ] []
