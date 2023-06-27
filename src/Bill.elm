@@ -3,7 +3,7 @@ module Bill exposing (BillRes, Model, Sponsor, blank, decoder, encode, toBillId,
 import Html.Styled exposing (Html, a, button, div, h1, h2, h3, h4, p, span, text)
 import Html.Styled.Attributes exposing (class, css, href, target)
 import Html.Styled.Events exposing (onClick)
-import Json.Decode exposing (Decoder, field, int, list, map, map2, map3, map4, map5, map6, map7, maybe, string)
+import Json.Decode exposing (Decoder, field, int, list, map, map2, map3, map4, map5, map6, map7, map8, maybe, string)
 import Json.Encode as Encode exposing (encode, object)
 import Tailwind.Utilities as T
 import Url.Builder as Url
@@ -46,6 +46,17 @@ type alias Sponsor =
     }
 
 
+type alias LatestAction =
+    { actionDate : String
+    , text : String
+    }
+
+
+latestActionDecoder : Decoder LatestAction
+latestActionDecoder =
+    map2 LatestAction (field "actionDate" string) (field "text" string)
+
+
 sponsorsDecoder : Decoder (List Sponsor)
 sponsorsDecoder =
     list <|
@@ -64,6 +75,7 @@ type alias Model =
     , number : String
     , type_ : String
     , congress : Int
+    , latestAction : LatestAction
     }
 
 
@@ -76,6 +88,7 @@ blank number type_ =
     , number = number
     , type_ = type_
     , congress = 0
+    , latestAction = { text = "", actionDate = "" }
     }
 
 
@@ -103,7 +116,7 @@ encodeSponsor { firstName, lastName, party, fullName } =
 
 billDecoder : Decoder Model
 billDecoder =
-    map7 Model
+    map8 Model
         (field "introducedDate" string)
         (field "sponsors" sponsorsDecoder)
         (maybe (field "policyArea" policyAreaDecoder))
@@ -111,6 +124,7 @@ billDecoder =
         (field "number" string)
         (field "type" string)
         (field "congress" int)
+        (field "latestAction" latestActionDecoder)
 
 
 type alias BillRes =
@@ -126,9 +140,16 @@ decoder =
         (field "request" requestDecoder)
 
 
+latestActionView : Model -> Html msg
+latestActionView model =
+    div []
+        [ text <| "Last Action: " ++ model.latestAction.text
+        ]
+
+
 sponsorsView : List Sponsor -> Html msg
 sponsorsView sponsors =
-    div []
+    div [ css [ T.my_4 ] ]
         [ span [] [ text "Sponsors: " ]
         , span [] <|
             List.map (\{ fullName } -> span [] [ text fullName ]) sponsors
@@ -149,6 +170,7 @@ view showSponsor sponsorShow bill =
     div []
         [ h2 [ css [ T.justify_center, T.leading_relaxed ] ] [ text bill.title ]
         , sponsor
+        , latestActionView bill
         , div [ css [ T.my_4 ] ] [ text <| "Introduced " ++ bill.introducedDate ]
         , div [ css [ T.my_4 ] ] [ a [ href <| toUrl bill, target "_blank" ] [ text "🔗 More info" ] ]
         ]
