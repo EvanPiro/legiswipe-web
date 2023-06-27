@@ -147,29 +147,20 @@ latestActionView model =
         ]
 
 
-sponsorsView : List Sponsor -> Html msg
-sponsorsView sponsors =
+sponsorsView : Model -> Html msg
+sponsorsView bill =
     div [ css [ T.my_4 ] ]
         [ span [] [ text "Sponsors: " ]
         , span [] <|
-            List.map (\{ fullName } -> span [] [ text fullName ]) sponsors
+            List.map (\{ fullName } -> span [] [ text fullName ]) bill.sponsors
         ]
 
 
-view : msg -> Bool -> Model -> Html msg
-view showSponsor sponsorShow bill =
-    let
-        sponsor =
-            case sponsorShow of
-                False ->
-                    div [ css [ T.my_4 ] ] [ button [ onClick showSponsor ] [ text "Show Sponsor" ] ]
-
-                True ->
-                    sponsorsView bill.sponsors
-    in
+view : Bool -> Model -> Html msg
+view sponsorShow bill =
     div []
         [ h2 [ css [ T.justify_center, T.leading_relaxed ] ] [ text bill.title ]
-        , sponsor
+        , sponsorsView bill
         , latestActionView bill
         , div [ css [ T.my_4 ] ] [ text <| "Introduced " ++ bill.introducedDate ]
         , div [ css [ T.my_4 ] ] [ a [ href <| toUrl bill, target "_blank" ] [ text "🔗 More info" ] ]

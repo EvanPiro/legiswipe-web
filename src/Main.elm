@@ -226,7 +226,6 @@ type Msg
     | SetVerdict Bill.Model Bool
     | LogRes (Result Http.Error ())
     | GotVoter (Result Http.Error Voter)
-    | ShowSponsor
     | SignIn
     | AuthTokenSuccess String
     | AuthTokenFail String
@@ -294,9 +293,6 @@ update msg model =
 
                         ( _, _, n ) ->
                             ( { model | auth = SignedIn voter }, getNextBills model.env.apiKey n )
-
-        ShowSponsor ->
-            ( { model | showSponsor = True }, Cmd.none )
 
         LogRes res ->
             ( model, Cmd.none )
@@ -429,7 +425,7 @@ billView model =
         BillFound bill ->
             div [ class "mt-1 mx-1" ]
                 [ authView False "Vote now!" model (\m voter -> yesNo bill)
-                , Bill.view ShowSponsor model.showSponsor bill
+                , Bill.view model.showSponsor bill
                 ]
 
         _ ->
