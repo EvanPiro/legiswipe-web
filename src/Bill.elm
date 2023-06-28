@@ -156,8 +156,8 @@ sponsorsView bill =
         ]
 
 
-view : Bool -> Model -> Html msg
-view sponsorShow bill =
+view : Model -> Html msg
+view bill =
     div []
         [ h2 [ css [ T.justify_center, T.leading_relaxed ] ] [ text bill.title ]
         , sponsorsView bill

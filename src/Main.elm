@@ -425,7 +425,7 @@ billView model =
         BillFound bill ->
             div [ class "mt-1 mx-1" ]
                 [ authView False "Vote now!" model (\m voter -> yesNo bill)
-                , Bill.view model.showSponsor bill
+                , Bill.view bill
                 ]
 
         _ ->
