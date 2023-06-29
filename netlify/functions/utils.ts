@@ -77,6 +77,11 @@ const VoteReq = t.type({
 
 export type IVoteReq = t.TypeOf<typeof VoteReq>;
 
+export interface IBasicResponse {
+  statusCode: StatusCodes;
+  body: string;
+}
+
 const RedeemReq = t.type({
   from: t.string,
   address: t.string,
@@ -107,6 +112,12 @@ const toBody = (req: HandlerEvent): TaskEither<AppError, any> =>
       statusCode: StatusCodes.BAD_REQUEST,
       message: "request JSON failed to parse",
     })
+  );
+
+export const parse = (body): TaskEither<string, any> =>
+  te.tryCatch(
+    async () => JSON.parse(body),
+    () => "request JSON failed to parse"
   );
 
 const toCredentials = (body: any): TaskEither<AppError, any> =>

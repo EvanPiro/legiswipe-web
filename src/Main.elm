@@ -446,7 +446,7 @@ view model =
                 Route.Bill _ _ ->
                     billView model
 
-                Route.NotFound ->
+                _ ->
                     div [] [ text "Oops! looks like this url is not supported." ]
             ]
         , div [ class "footer" ] []
@@ -479,7 +479,9 @@ voterView model voter =
                 div [] []
 
             _ ->
-                redeemView model voter
+                div [] []
+
+        --redeemView model voter
         ]
 
 

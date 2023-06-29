@@ -17,6 +17,7 @@ import Url.Parser exposing ((</>), Parser, map, oneOf, parse, s, string, top)
 type Route
     = Home
     | Bill String String
+    | Member String
     | NotFound
 
 
@@ -27,6 +28,7 @@ route =
 
         -- /bill/<type>/<number>
         , map Bill (s "bill" </> s "118" </> string </> string)
+        , map Member (s "member" </> string)
         ]
 
 
@@ -58,6 +60,11 @@ toRoute string =
 billToUrl : Bill.Model -> String
 billToUrl bill =
     absolute [ "bill", "118", bill.type_, bill.number ] []
+
+
+bioguideIdToUrl : String -> String
+bioguideIdToUrl bioguideId =
+    absolute [ "member", bioguideId ] []
 
 
 billIdsToUrl : String -> String -> String
