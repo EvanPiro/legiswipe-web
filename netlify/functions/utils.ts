@@ -234,7 +234,9 @@ const createVoterIfNotExists =
         else {
           const createItemCommand = new PutItemCommand({
             TableName: tableName,
-            Item: marshall(voter),
+            Item: marshall(voter, {
+              removeUndefinedValues: true,
+            }),
             ConditionExpression: "attribute_not_exists(id)",
           });
           await client.send(createItemCommand);
