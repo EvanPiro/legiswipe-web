@@ -192,12 +192,12 @@ const billRespToTweetTuple = ({ bill }: IBillResp): [IBillItem, any] => {
     ? "@" + sponsorHandle
     : bill.sponsors[0].fullName;
   const titleShort =
-    bill.title.length < 160 ? bill.title : bill.title.slice(0, 168) + "...";
+    bill.title.length < 111 ? bill.title : bill.title.slice(0, 165) + "...";
 
   const actionShort =
-    bill.latestAction.text.length < 60
+    bill.latestAction.text.length < 52
       ? bill.latestAction.text
-      : bill.latestAction.text.slice(0, 57) + "...";
+      : bill.latestAction.text.slice(0, 49) + "...";
 
   const tweet = {
     text: `"${titleShort}."
