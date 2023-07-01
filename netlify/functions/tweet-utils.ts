@@ -15,6 +15,7 @@ import {
 import axios from "axios";
 import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import addOAuthInterceptor, { OAuthInterceptorConfig } from "axios-oauth-1.0a";
+import { handles } from "./member-handles";
 
 export const congressApiBillsUrl = (congressApiKey: string) =>
   "https://api.congress.gov/v3/bill?api_key=" + congressApiKey;
@@ -183,6 +184,10 @@ const billToLink = (bill: IBillItem) => {
 ``;
 
 const billRespToTweetTuple = ({ bill }: IBillResp): [IBillItem, any] => {
+  const sponsorHandle = handles.filter(
+    ({ bioguideId }) => bill.sponsors[0]?.bioguideId
+  )[0]?.handle;
+  const sponsor = sponsorHandle ? sponsorHandle : bill.sponsors[0].fullName;
   const tweet = {
     text: `"${bill.title}"
 
@@ -190,7 +195,7 @@ Latest Action: ${bill.latestAction.text}
 
 ${billToLink(bill)}
 
-${bill.sponsors[0].fullName}`,
+Sponsor: @${sponsor}`,
     poll: {
       options: ["Yes", "No"],
       duration_minutes: 60 * 24 * 7,
