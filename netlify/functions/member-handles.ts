@@ -1236,6 +1236,10 @@ export const handles = [
     handle: "FrankPallone",
   },
   {
+    bioguideId: "P000595",
+    handle: "SenGaryPeters",
+  },
+  {
     bioguideId: "P000609",
     handle: "USRepGaryPalmer",
   },

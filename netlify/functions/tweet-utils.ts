@@ -159,8 +159,8 @@ const rawBillItemToBillResp = (resp: any): TaskEither<string, IBillResp> =>
   pipe(
     te.fromEither(BillResp.decode(resp)),
     te.mapLeft((err) => {
-      console.log(err);
-      return JSON.stringify(err);
+      console.log(JSON.stringify(err));
+      return "raw bill item failed to parse";
     })
   );
 
@@ -185,9 +185,11 @@ const billToLink = (bill: IBillItem) => {
 
 const billRespToTweetTuple = ({ bill }: IBillResp): [IBillItem, any] => {
   const sponsorHandle = handles.filter(
-    ({ bioguideId }) => bill.sponsors[0]?.bioguideId
+    ({ bioguideId }) => bioguideId === bill.sponsors[0]?.bioguideId
   )[0]?.handle;
   const sponsor = sponsorHandle ? sponsorHandle : bill.sponsors[0].fullName;
+  console.log(handles.filter(({ bioguideId }) => bill.sponsors[0]?.bioguideId));
+  console.log(sponsor);
   const tweet = {
     text: `"${bill.title}"
 
