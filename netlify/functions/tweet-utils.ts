@@ -195,14 +195,14 @@ const billRespToTweetTuple = ({ bill }: IBillResp): [IBillItem, any] => {
     bill.title.length < 111 ? bill.title : bill.title.slice(0, 165) + "...";
 
   const actionShort =
-    bill.latestAction.text.length < 52
+    bill.latestAction.text.length < 48
       ? bill.latestAction.text
-      : bill.latestAction.text.slice(0, 49) + "...";
+      : bill.latestAction.text.slice(0, 45) + "...";
 
   const tweet = {
     text: `"${titleShort}."
 
-Latest Action: ${actionShort}
+Status: ${actionShort}
 
 ${billToLink(bill)}
 
