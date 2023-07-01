@@ -1,28 +1,33 @@
 import { schedule } from "@netlify/functions";
-import * as t from "io-ts";
-import { flow, pipe } from "fp-ts/function";
+import { pipe } from "fp-ts/function";
 import { task, taskEither as te } from "fp-ts";
 import { StatusCodes } from "http-status-codes";
 import { TaskEither } from "fp-ts/TaskEither";
 import axios from "axios";
 import * as dotenv from "dotenv";
 import {
-  BatchWriteItemCommand,
-  BatchWriteItemCommandInput,
   DynamoDBClient,
+  GetItemCommand,
+  GetItemCommandInput,
+  PutItemCommand,
+  PutItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { marshall } from "@aws-sdk/util-dynamodb";
-import { parse } from "./utils";
+import {
+  congressApiBillsUrl,
+  IBillMetadata,
+  IBillsResp,
+  IBillTweetQueueItem,
+  rawRespToBillsResp,
+} from "./tweet-utils";
 
 dotenv.config();
 
 const congressApiKey = process.env.CONGRESS_API_KEY;
 
-const congressApiUrl =
-  "https://api.congress.gov/v3/bill?api_key=" + congressApiKey;
-
 const region = "us-east-1";
-const billsTableName = "Bills";
+const billsTableName = "bill_tweet_queue";
+const tweetReceiptTable = "bill_tweet_receipt";
 const client = new DynamoDBClient({
   region,
   credentials: {
@@ -31,116 +36,105 @@ const client = new DynamoDBClient({
   },
 });
 
-// To learn about scheduled functions and supported cron extensions,
-// see: https://ntl.fyi/sched-func
-
-// Request bills
-// Decode bills
-// Batch write bills
-
-const BillMetadata = t.type({
-  congress: t.number,
-  originChamber: t.string,
-  originChamberCode: t.string,
-  number: t.string,
-  text: t.string,
+const billMetadataToBillItem = ({
+  congress,
+  originChamberCode,
+  latestAction,
+  number,
+  url,
+}: IBillMetadata): IBillTweetQueueItem => ({
+  id: `${congress + ""}_${originChamberCode}_${number}_${
+    latestAction.actionDate
+  }_${latestAction.text.slice(0, 80)}`,
+  timestamp_added: new Date().getTime(),
+  url,
 });
 
-const BillsResp = t.type({
-  bills: t.array(BillMetadata),
-});
-
-type IBillsResp = t.TypeOf<typeof BillsResp>;
-
-const BillWithId = t.type({
-  congress_chamber: t.string,
-});
-
-const BillItem = t.intersection([BillMetadata, BillWithId]);
-
-type IBillItem = t.TypeOf<typeof BillItem>;
-
-const getRawResp = (): TaskEither<string, any> =>
+const getRawResp = (congressApiKey: string): TaskEither<string, any> =>
   te.tryCatch(
     async () => {
-      const resp = await axios.get(congressApiUrl);
+      const resp = await axios.get(congressApiBillsUrl(congressApiKey));
       return resp.data;
     },
     () => "Bills request failed"
   );
 
-const rawRespToBillsResp = (resp: any): TaskEither<string, IBillsResp> =>
-  pipe(
-    te.fromEither(BillsResp.decode(resp)),
-    te.mapLeft((err) => JSON.stringify(err))
-  );
+const billRespToBillItems = (billsResp: IBillsResp): IBillTweetQueueItem[] =>
+  billsResp.bills.map(billMetadataToBillItem);
 
-const billRespToBillItems = (billsResp: IBillsResp): IBillItem[] =>
-  billsResp.bills.map((bill) => ({
-    congress_chamber: `${bill.congress + ""}_${bill.originChamberCode}`,
-    ...bill,
-  }));
+const hasTweetBeenSent =
+  (tweetTable: string) =>
+  (ddb: DynamoDBClient) =>
+  async (bill: IBillTweetQueueItem): Promise<boolean> => {
+    const params: GetItemCommandInput = {
+      TableName: tweetTable,
+      Key: marshall({ id: bill.id }),
+    };
+
+    const command = new GetItemCommand(params);
+
+    const res = await ddb.send(command);
+    return !!res.Item;
+  };
 
 const saveBillItems =
-  (tableName: string) =>
+  (tweetReceiptTable: string) =>
+  (billQueueItemTable: string) =>
   (ddb: DynamoDBClient) =>
-  (billItems: IBillItem[]): TaskEither<string, string[]> =>
+  (billItems: IBillTweetQueueItem[]): TaskEither<string, string[]> =>
     te.tryCatch(
       async () => {
-        const params: BatchWriteItemCommandInput = {
-          RequestItems: {
-            [tableName]: billItems.map((item) => ({
-              PutRequest: {
-                Item: marshall(item),
-              },
-            })),
-          },
-        };
+        for (const bill of billItems) {
+          try {
+            const isSent = await hasTweetBeenSent(tweetReceiptTable)(ddb)(bill);
 
-        const command = new BatchWriteItemCommand(params);
+            if (!isSent) {
+              const putParams: PutItemCommandInput = {
+                TableName: billQueueItemTable,
+                ConditionExpression: "attribute_not_exists(id)",
+                Item: marshall(bill),
+                ReturnValues: "NONE",
+              };
 
-        await ddb.send(command);
+              const putCommand = new PutItemCommand(putParams);
+              await ddb.send(putCommand);
+            }
+          } catch (err) {
+            console.log(err);
+            if (err.code === "ConditionalCheckFailedException") throw err;
+          }
+        }
 
-        return billItems.map((item) => item.congress_chamber);
+        return billItems.map((item) => `${item.id}`);
       },
-      () => "Saving bills to DDB failed."
+      (err) => {
+        console.log(err);
+        return "Bill save failed";
+      }
     );
 
 export const handler = schedule(
-  "* * * * *",
+  "0 */2 * * *",
   async (event) =>
     await pipe(
-      getRawResp(),
-      te.chain(parse),
+      getRawResp(congressApiKey),
       te.chain(rawRespToBillsResp),
       te.map(billRespToBillItems),
-      te.chain(saveBillItems(billsTableName)(client)),
+      te.chain(saveBillItems(tweetReceiptTable)(billsTableName)(client)),
       te.fold(
         (err) => {
-          console.log(err, "asdfasdf");
+          console.log(err);
           return task.of({
             statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-            body: "asdfdsaf",
           });
         },
         (ids) => {
-          console.log(ids);
+          console.log("Succeeded saving", ids);
 
           return task.of({
             statusCode: StatusCodes.OK,
-            body: ids.reduce((acc, val) => `${acc}, ${val}`, ""),
           });
         }
       )
     )()
 );
-
-// {
-//   const eventBody = JSON.parse(event.body);
-//
-//   console.log(`Next function run at ${eventBody.next_run}.`);
-//
-//   return {
-//     statusCode: 200,
-//   };
-// }

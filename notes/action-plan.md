@@ -1,9 +1,7 @@
 # Action Plan
-6 - 29 -2023
-
+June 29, 2023
 
 ## Objectives
-
 Make a twitter bot that posts daily bills from the congressional API and exposes a poll for yes or no votes.
 
 ## Logic
@@ -18,3 +16,20 @@ Make a twitter bot that posts daily bills from the congressional API and exposes
     - Yes
     - No
 
+## Tasks
+- [x] Build bill tweet queue
+- [x] Build bills index and script for API to DynamoDB operation
+- [x] Integrate bill request per metadata item
+- [x] Write twitter send function with the aforementioned tweet data
+- [x] Register for twitter API and add creds to env on local
+- [x] Write scheduled task that queries DDB for bills no tweeted
+- [x] Integrate twitter send function 
+- [ ] When queueing bills, check tweet table if already there. If not then add, else don't.
+- [ ] Copy legiswipe web to project to new project
+- [ ] Remove all web code
+- [ ] make repo private on github, push
+- [ ] Set up netlify for bot project
+- [ ] Add creds to netlify
+
+## Later
+- [ ] Register for blue check mark on Twitter
