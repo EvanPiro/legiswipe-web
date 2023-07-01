@@ -73,9 +73,6 @@ const BillItem = t.type({
   title: t.string,
   type: t.string,
   originChamber: t.string,
-  policyArea: t.type({
-    name: t.string,
-  }),
   sponsors: t.array(Sponsor),
   latestAction: LatestAction,
 });
@@ -159,7 +156,11 @@ const rawBillItemToBillResp = (resp: any): TaskEither<string, IBillResp> =>
   pipe(
     te.fromEither(BillResp.decode(resp)),
     te.mapLeft((err) => {
-      console.log(JSON.stringify(err));
+      console.log("payload that failed parsing:", resp);
+      console.log(resp.bill.sponsors);
+
+      console.log(err[0].context);
+
       return "raw bill item failed to parse";
     })
   );
@@ -187,17 +188,25 @@ const billRespToTweetTuple = ({ bill }: IBillResp): [IBillItem, any] => {
   const sponsorHandle = handles.filter(
     ({ bioguideId }) => bioguideId === bill.sponsors[0]?.bioguideId
   )[0]?.handle;
-  const sponsor = sponsorHandle ? sponsorHandle : bill.sponsors[0].fullName;
-  console.log(handles.filter(({ bioguideId }) => bill.sponsors[0]?.bioguideId));
-  console.log(sponsor);
-  const tweet = {
-    text: `"${bill.title}"
+  const sponsor = sponsorHandle
+    ? "@" + sponsorHandle
+    : bill.sponsors[0].fullName;
+  const titleShort =
+    bill.title.length < 160 ? bill.title : bill.title.slice(0, 168) + "...";
 
-Latest Action: ${bill.latestAction.text}
+  const actionShort =
+    bill.latestAction.text.length < 60
+      ? bill.latestAction.text
+      : bill.latestAction.text.slice(0, 57) + "...";
+
+  const tweet = {
+    text: `"${titleShort}."
+
+Latest Action: ${actionShort}
 
 ${billToLink(bill)}
 
-Sponsor: @${sponsor}`,
+Sponsor: ${sponsor}`,
     poll: {
       options: ["Yes", "No"],
       duration_minutes: 60 * 24 * 7,

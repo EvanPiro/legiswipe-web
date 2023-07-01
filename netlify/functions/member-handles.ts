@@ -900,6 +900,10 @@ export const handles = [
     handle: "RepLaLota",
   },
   {
+    bioguideId: "L000575",
+    handle: "SenatorLankford",
+  },
+  {
     bioguideId: "L000578",
     handle: "RepLaMalfa",
   },
@@ -1270,6 +1274,10 @@ export const handles = [
   {
     bioguideId: "P000615",
     handle: "RepGregPence",
+  },
+  {
+    bioguideId: "G000386",
+    handle: "ChuckGrassley",
   },
   {
     bioguideId: "G000600",
