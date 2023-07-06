@@ -18,7 +18,8 @@ import addOAuthInterceptor, { OAuthInterceptorConfig } from "axios-oauth-1.0a";
 import { handles } from "./member-handles";
 
 export const congressApiBillsUrl = (congressApiKey: string) =>
-  "https://api.congress.gov/v3/bill?api_key=" + congressApiKey;
+  "https://api.congress.gov/v3/bill?offset=0&limit=100&api_key=" +
+  congressApiKey;
 
 const authCongressApiUrl = (url: string) => (congressApiKey: string) =>
   `${url}&api_key=${congressApiKey}`;

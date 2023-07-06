@@ -28,7 +28,7 @@ const twitter: ITwitterConfig = {
 // To learn about scheduled functions and supported cron extensions,
 // see: https://ntl.fyi/sched-func
 export const handler = schedule(
-  "@hourly",
+  "*/30 * * * *",
   tweetLatestBill(twitter)(congressApiKey)(billsQueueTable)(tweetReceiptTable)(
     dbb
   )
