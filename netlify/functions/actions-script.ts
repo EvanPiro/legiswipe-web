@@ -21,7 +21,7 @@ const ddb = new DynamoDBClient({
 
 const run = async () => {
   await indexActionsJob(congressApiKey)(actionsTable)(ddb)({
-    numberOfBatches: 100,
+    numberOfBatches: 50,
     batchSize: 25,
   });
 };

@@ -22,7 +22,7 @@ const ddb = new DynamoDBClient({
 
 export const handler = schedule("@hourly", async (event) =>
   indexActionsJob(congressApiKey)(actionsTable)(ddb)({
-    numberOfBatches: 40,
+    numberOfBatches: 50,
     batchSize: 25,
   })
 );

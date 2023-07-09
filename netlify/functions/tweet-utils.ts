@@ -45,6 +45,8 @@ const BillMetadata = t.type({
   originChamberCode: t.string,
   number: t.string,
   url: t.string,
+  type: t.string,
+  title: t.string,
   latestAction: LatestAction,
 });
 
@@ -73,13 +75,14 @@ const Sponsor = t.type({
 });
 
 const BillItem = t.type({
-  congress: t.number,
-  number: t.string,
   title: t.string,
+  congress: t.number,
   type: t.string,
+  number: t.string,
   originChamber: t.string,
   sponsors: t.array(Sponsor),
   latestAction: LatestAction,
+  url: t.string,
 });
 
 type IBillItem = t.TypeOf<typeof BillItem>;
@@ -102,7 +105,14 @@ type IBillTweetReceipt = t.TypeOf<typeof BillTweetReceipt>;
 
 export const Action = t.type({
   action: t.string,
+  id: t.string,
   date: t.string,
+  title: t.string,
+  type: t.string,
+  number: t.string,
+  url: t.string,
+  htmlUrl: t.string,
+  congress: t.number,
 });
 
 export type IAction = t.TypeOf<typeof Action>;
@@ -178,7 +188,12 @@ const rawBillItemToBillResp = (resp: any): TaskEither<string, IBillResp> =>
     })
   );
 
-const billToLink = (bill: IBillItem) => {
+interface IBillId {
+  type: string;
+  number: string;
+}
+
+const billIdToLink = (bill: IBillId) => {
   const base = `https://www.congress.gov/bill/118th-congress`;
   switch (bill.type) {
     case "S":
@@ -217,7 +232,7 @@ const billRespToTweetTuple = ({ bill }: IBillResp): [IBillItem, any] => {
 
 Status: ${actionShort}
 
-${billToLink(bill)}
+${billIdToLink(bill)}
 
 Sponsor: ${sponsor}`,
     poll: {
@@ -361,8 +376,14 @@ const billMetadataToBillItem = ({
 
 export const billMetadataToAction = (bill: IBillMetadata): IAction => ({
   action: bill.latestAction.text,
-  date: `${bill.latestAction.actionDate} ${bill.congress}/${bill.originChamberCode}/${bill.number}`,
-  ...bill,
+  id: `${bill.congress}/${bill.type}/${bill.number}`,
+  date: bill.latestAction.actionDate,
+  type: bill.type,
+  number: bill.number,
+  title: bill.title,
+  url: bill.url,
+  htmlUrl: billIdToLink(bill),
+  congress: bill.congress,
 });
 
 export const getRawResp =
