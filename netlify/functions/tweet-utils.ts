@@ -82,7 +82,6 @@ const BillItem = t.type({
   originChamber: t.string,
   sponsors: t.array(Sponsor),
   latestAction: LatestAction,
-  url: t.string,
 });
 
 type IBillItem = t.TypeOf<typeof BillItem>;
