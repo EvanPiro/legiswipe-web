@@ -6,9 +6,3 @@ a two thirds vote to bring it back to the other chamber for an additional two th
 If that vote succeeds, then the bill becomes law. 
 
 If the president does not look at a bill within 10 days, then it becomes law.
-
-
-
-
-Improvements:
-If the president were non-partisan the bills being passed might benefit from a lack of party allegiance.

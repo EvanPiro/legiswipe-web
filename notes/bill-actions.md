@@ -1,6 +1,5 @@
 # Actions
 
-
 `Committee on Energy and Natural Resources. Ordered to be reported without amendment favorably.`
 Bill is ready to be considered by its respective chamber.
 
