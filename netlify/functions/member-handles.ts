@@ -1,775 +1,775 @@
 [
   {
     bioguideId: "A000055",
-    handle: "@Robert_Aderholt",
+    handle: "Robert_Aderholt",
   },
   {
     bioguideId: "A000148",
-    handle: "@RepAuchincloss",
+    handle: "RepAuchincloss",
   },
   {
     bioguideId: "A000369",
-    handle: "@MarkAmodeiNV2",
+    handle: "MarkAmodeiNV2",
   },
   {
     bioguideId: "A000370",
-    handle: "@RepAdams",
+    handle: "RepAdams",
   },
   {
     bioguideId: "A000371",
-    handle: "@RepPeteAguilar",
+    handle: "RepPeteAguilar",
   },
   {
     bioguideId: "A000372",
-    handle: "@RepRickAllen",
+    handle: "RepRickAllen",
   },
   {
     bioguideId: "A000375",
-    handle: "@RepArrington",
+    handle: "RepArrington",
   },
   {
     bioguideId: "A000376",
-    handle: "@RepColinAllred",
+    handle: "RepColinAllred",
   },
   {
     bioguideId: "A000377",
-    handle: "@RepArmstrongND",
+    handle: "RepArmstrongND",
   },
   {
     bioguideId: "A000379",
-    handle: "@RepMarkAlford",
+    handle: "RepMarkAlford",
   },
   {
     bioguideId: "B000490",
-    handle: "@SanfordBishop",
+    handle: "SanfordBishop",
   },
   {
     bioguideId: "B000574",
-    handle: "@repblumenauer",
+    handle: "repblumenauer",
   },
   {
     bioguideId: "B000668",
-    handle: "@RepBentz",
+    handle: "RepBentz",
   },
   {
     bioguideId: "B000740",
-    handle: "@RepBice",
+    handle: "RepBice",
   },
   {
     bioguideId: "B000825",
-    handle: "@RepBoebert",
+    handle: "RepBoebert",
   },
   {
     bioguideId: "B001223",
-    handle: "@RepBowman",
+    handle: "RepBowman",
   },
   {
     bioguideId: "B001224",
-    handle: "@RepCori",
+    handle: "RepCori",
   },
   {
     bioguideId: "B001230",
-    handle: "@SenatorBaldwin",
+    handle: "SenatorBaldwin",
   },
   {
     bioguideId: "B001236",
-    handle: "@JohnBoozman",
+    handle: "JohnBoozman",
   },
   {
     bioguideId: "B001243",
-    handle: "@MarshaBlackburn",
+    handle: "MarshaBlackburn",
   },
   {
     bioguideId: "B001248",
-    handle: "@michaelcburgess",
+    handle: "michaelcburgess",
   },
   {
     bioguideId: "B001257",
-    handle: "@RepGusBilirakis",
+    handle: "RepGusBilirakis",
   },
   {
     bioguideId: "B001260",
-    handle: "@VernBuchanan",
+    handle: "VernBuchanan",
   },
   {
     bioguideId: "B001261",
-    handle: "@SenJohnBarrasso",
+    handle: "SenJohnBarrasso",
   },
   {
     bioguideId: "B001267",
-    handle: "@SenatorBennet",
+    handle: "SenatorBennet",
   },
   {
     bioguideId: "B001275",
-    handle: "@RepLarryBucshon",
+    handle: "RepLarryBucshon",
   },
   {
     bioguideId: "B001277",
-    handle: "@SenBlumenthal",
+    handle: "SenBlumenthal",
   },
   {
     bioguideId: "B001278",
-    handle: "@RepBonamici",
+    handle: "RepBonamici",
   },
   {
     bioguideId: "B001281",
-    handle: "@RepBeatty",
+    handle: "RepBeatty",
   },
   {
     bioguideId: "B001282",
-    handle: "@RepAndyBarr",
+    handle: "RepAndyBarr",
   },
   {
     bioguideId: "B001285",
-    handle: "@RepBrownley",
+    handle: "RepBrownley",
   },
   {
     bioguideId: "B001287",
-    handle: "@RepBera",
+    handle: "RepBera",
   },
   {
     bioguideId: "B001288",
-    handle: "@CoryBooker",
+    handle: "CoryBooker",
   },
   {
     bioguideId: "B001291",
-    handle: "@RepBrianBabin",
+    handle: "RepBrianBabin",
   },
   {
     bioguideId: "B001292",
-    handle: "@RepDonBeyer",
+    handle: "RepDonBeyer",
   },
   {
     bioguideId: "B001295",
-    handle: "@RepBost",
+    handle: "RepBost",
   },
   {
     bioguideId: "B001296",
-    handle: "@CongBoyle",
+    handle: "CongBoyle",
   },
   {
     bioguideId: "B001297",
-    handle: "@RepKenBuck",
+    handle: "RepKenBuck",
   },
   {
     bioguideId: "B001298",
-    handle: "@RepDonBacon",
+    handle: "RepDonBacon",
   },
   {
     bioguideId: "B001299",
-    handle: "@RepJimBanks",
+    handle: "RepJimBanks",
   },
   {
     bioguideId: "B001300",
-    handle: "@RepBarragan",
+    handle: "RepBarragan",
   },
   {
     bioguideId: "B001301",
-    handle: "@RepJackBergman",
+    handle: "RepJackBergman",
   },
   {
     bioguideId: "B001302",
-    handle: "@RepAndyBiggsAZ",
+    handle: "RepAndyBiggsAZ",
   },
   {
     bioguideId: "B001303",
-    handle: "@RepLBR",
+    handle: "RepLBR",
   },
   {
     bioguideId: "B001305",
-    handle: "@SenTedBuddNC",
+    handle: "SenTedBuddNC",
   },
   {
     bioguideId: "B001306",
-    handle: "@RepBalderson",
+    handle: "RepBalderson",
   },
   {
     bioguideId: "B001307",
-    handle: "@RepJimBaird",
+    handle: "RepJimBaird",
   },
   {
     bioguideId: "B001309",
-    handle: "@RepTimBurchett",
+    handle: "RepTimBurchett",
   },
   {
     bioguideId: "B001310",
-    handle: "@SenatorBraun",
+    handle: "SenatorBraun",
   },
   {
     bioguideId: "B001311",
-    handle: "@RepDanBishop",
+    handle: "RepDanBishop",
   },
   {
     bioguideId: "B001313",
-    handle: "@RepShontelBrown",
+    handle: "RepShontelBrown",
   },
   {
     bioguideId: "B001313",
-    handle: "@SenSherrodBrown",
+    handle: "SenSherrodBrown",
   },
   {
     bioguideId: "B001314",
-    handle: "@RepAaronBean",
+    handle: "RepAaronBean",
   },
   {
     bioguideId: "B001315",
-    handle: "@RepNikkiB",
+    handle: "RepNikkiB",
   },
   {
     bioguideId: "B001316",
-    handle: "@RepEricBurlison",
+    handle: "RepEricBurlison",
   },
   {
     bioguideId: "B001317",
-    handle: "@RepBrecheen",
+    handle: "RepBrecheen",
   },
   {
     bioguideId: "B001318",
-    handle: "@RepBeccaB",
+    handle: "RepBeccaB",
   },
   {
     bioguideId: "B001319",
-    handle: "@SenKatieBritt",
+    handle: "SenKatieBritt",
   },
   {
     bioguideId: "C000059",
-    handle: "@KenCalvert",
+    handle: "KenCalvert",
   },
   {
     bioguideId: "C000127",
-    handle: "@SenatorCantwell",
+    handle: "SenatorCantwell",
   },
   {
     bioguideId: "C000141",
-    handle: "@SenatorCardin",
+    handle: "SenatorCardin",
   },
   {
     bioguideId: "C000174",
-    handle: "@SenatorCarper",
+    handle: "SenatorCarper",
   },
   {
     bioguideId: "C000537",
-    handle: "@WhipClyburn",
+    handle: "WhipClyburn",
   },
   {
     bioguideId: "C000880",
-    handle: "@MikeCrapo",
+    handle: "MikeCrapo",
   },
   {
     bioguideId: "C001035",
-    handle: "@SenatorCollins",
+    handle: "SenatorCollins",
   },
   {
     bioguideId: "C001039",
-    handle: "@RepKatCammack",
+    handle: "RepKatCammack",
   },
   {
     bioguideId: "C001047",
-    handle: "@SenCapito",
+    handle: "SenCapito",
   },
   {
     bioguideId: "C001051",
-    handle: "@JudgeCarter",
+    handle: "JudgeCarter",
   },
   {
     bioguideId: "C001053",
-    handle: "@TomColeOK04",
+    handle: "TomColeOK04",
   },
   {
     bioguideId: "C001054",
-    handle: "@RepJerryCarl",
+    handle: "RepJerryCarl",
   },
   {
     bioguideId: "C001055",
-    handle: "@RepEdCase",
+    handle: "RepEdCase",
   },
   {
     bioguideId: "C001056",
-    handle: "@JohnCornyn",
+    handle: "JohnCornyn",
   },
   {
     bioguideId: "C001059",
-    handle: "@RepJimCosta",
+    handle: "RepJimCosta",
   },
   {
     bioguideId: "C001061",
-    handle: "@repcleaver",
+    handle: "repcleaver",
   },
   {
     bioguideId: "C001063",
-    handle: "@RepCuellar",
+    handle: "RepCuellar",
   },
   {
     bioguideId: "C001066",
-    handle: "@USRepKCastor",
+    handle: "USRepKCastor",
   },
   {
     bioguideId: "C001067",
-    handle: "@RepYvetteClarke",
+    handle: "RepYvetteClarke",
   },
   {
     bioguideId: "C001068",
-    handle: "@RepCohen",
+    handle: "RepCohen",
   },
   {
     bioguideId: "C001069",
-    handle: "@RepJoeCourtney",
+    handle: "RepJoeCourtney",
   },
   {
     bioguideId: "C001070",
-    handle: "@SenBobCasey",
+    handle: "SenBobCasey",
   },
   {
     bioguideId: "C001072",
-    handle: "@RepAndreCarson",
+    handle: "RepAndreCarson",
   },
   {
     bioguideId: "C001075",
-    handle: "@SenBillCassidy",
+    handle: "SenBillCassidy",
   },
   {
     bioguideId: "C001078",
-    handle: "@GerryConnolly",
+    handle: "GerryConnolly",
   },
   {
     bioguideId: "C001080",
-    handle: "@RepJudyChu",
+    handle: "RepJudyChu",
   },
   {
     bioguideId: "C001084",
-    handle: "@RepCicilline",
+    handle: "RepCicilline",
   },
   {
     bioguideId: "C001087",
-    handle: "@RepRickCrawford",
+    handle: "RepRickCrawford",
   },
   {
     bioguideId: "C001088",
-    handle: "@ChrisCoons",
+    handle: "ChrisCoons",
   },
   {
     bioguideId: "C001090",
-    handle: "@RepCartwright",
+    handle: "RepCartwright",
   },
   {
     bioguideId: "C001091",
-    handle: "@JoaquinCastrotx",
+    handle: "JoaquinCastrotx",
   },
   {
     bioguideId: "C001095",
-    handle: "@SenTomCotton",
+    handle: "SenTomCotton",
   },
   {
     bioguideId: "C001096",
-    handle: "@SenKevinCramer",
+    handle: "SenKevinCramer",
   },
   {
     bioguideId: "C001097",
-    handle: "@RepCardenas",
+    handle: "RepCardenas",
   },
   {
     bioguideId: "C001098",
-    handle: "@SenTedCruz",
+    handle: "SenTedCruz",
   },
   {
     bioguideId: "C001101",
-    handle: "@RepKClark",
+    handle: "RepKClark",
   },
   {
     bioguideId: "C001103",
-    handle: "@RepBuddyCarter",
+    handle: "RepBuddyCarter",
   },
   {
     bioguideId: "C001108",
-    handle: "@RepJamesComer",
+    handle: "RepJamesComer",
   },
   {
     bioguideId: "C001110",
-    handle: "@RepLouCorrea",
+    handle: "RepLouCorrea",
   },
   {
     bioguideId: "C001112",
-    handle: "@RepCarbajal",
+    handle: "RepCarbajal",
   },
   {
     bioguideId: "C001113",
-    handle: "@SenCortezMastoo",
+    handle: "SenCortezMastoo",
   },
   {
     bioguideId: "C001114",
-    handle: "@RepJohnCurtis",
+    handle: "RepJohnCurtis",
   },
   {
     bioguideId: "C001115",
-    handle: "@RepCloudTX",
+    handle: "RepCloudTX",
   },
   {
     bioguideId: "C001116",
-    handle: "@Rep_Clyde",
+    handle: "Rep_Clyde",
   },
   {
     bioguideId: "C001117",
-    handle: "@RepCasten",
+    handle: "RepCasten",
   },
   {
     bioguideId: "C001118",
-    handle: "@RepBenCline",
+    handle: "RepBenCline",
   },
   {
     bioguideId: "C001119",
-    handle: "@RepAngieCraig",
+    handle: "RepAngieCraig",
   },
   {
     bioguideId: "C001120",
-    handle: "@RepDanCrenshaw",
+    handle: "RepDanCrenshaw",
   },
   {
     bioguideId: "C001121",
-    handle: "@RepJasonCrow",
+    handle: "RepJasonCrow",
   },
   {
     bioguideId: "C001125",
-    handle: "@RepTroyCarter",
+    handle: "RepTroyCarter",
   },
   {
     bioguideId: "C001126",
-    handle: "@RepMikeCarey",
+    handle: "RepMikeCarey",
   },
   {
     bioguideId: "C001127",
-    handle: "@CongresswomanSC",
+    handle: "CongresswomanSC",
   },
   {
     bioguideId: "C001129",
-    handle: "@RepMikeCollins",
+    handle: "RepMikeCollins",
   },
   {
     bioguideId: "C001130",
-    handle: "@RepJasmine",
+    handle: "RepJasmine",
   },
   {
     bioguideId: "C001131",
-    handle: "@RepCasar",
+    handle: "RepCasar",
   },
   {
     bioguideId: "C001132",
-    handle: "@RepEliCrane",
+    handle: "RepEliCrane",
   },
   {
     bioguideId: "C001133",
-    handle: "@RepCiscomani",
+    handle: "RepCiscomani",
   },
   {
     bioguideId: "C001135",
-    handle: "@RepLCD",
+    handle: "RepLCD",
   },
   {
     bioguideId: "D000032",
-    handle: "@RepDonaldsPress",
+    handle: "RepDonaldsPress",
   },
   {
     bioguideId: "D000096",
-    handle: "@RepDannyDavis",
+    handle: "RepDannyDavis",
   },
   {
     bioguideId: "D000197",
-    handle: "@RepDianaDeGette",
+    handle: "RepDianaDeGette",
   },
   {
     bioguideId: "D000216",
-    handle: "@rosadelauro",
+    handle: "rosadelauro",
   },
   {
     bioguideId: "D000399",
-    handle: "@RepLloydDoggett",
+    handle: "RepLloydDoggett",
   },
   {
     bioguideId: "D000530",
-    handle: "@RepDeluzio",
+    handle: "RepDeluzio",
   },
   {
     bioguideId: "D000563",
-    handle: "@SenatorDurbin",
+    handle: "SenatorDurbin",
   },
   {
     bioguideId: "D000594",
-    handle: "@RepMonicaDLC",
+    handle: "RepMonicaDLC",
   },
   {
     bioguideId: "D000600",
-    handle: "@MarioDB",
+    handle: "MarioDB",
   },
   {
     bioguideId: "D000615",
-    handle: "@RepJeffDuncan",
+    handle: "RepJeffDuncan",
   },
   {
     bioguideId: "D000616",
-    handle: "@DesJarlaisTN04",
+    handle: "DesJarlaisTN04",
   },
   {
     bioguideId: "D000617",
-    handle: "@RepDelBene",
+    handle: "RepDelBene",
   },
   {
     bioguideId: "D000618",
-    handle: "@SteveDaines",
+    handle: "SteveDaines",
   },
   {
     bioguideId: "D000619",
-    handle: "@RodneyDavis",
+    handle: "RodneyDavis",
   },
   {
     bioguideId: "D000622",
-    handle: "@SenDuckworth",
+    handle: "SenDuckworth",
   },
   {
     bioguideId: "D000623",
-    handle: "@RepDeSaulnier",
+    handle: "RepDeSaulnier",
   },
   {
     bioguideId: "D000624",
-    handle: "@RepDebDingell",
+    handle: "RepDebDingell",
   },
   {
     bioguideId: "D000626",
-    handle: "@WarrenDavidson",
+    handle: "WarrenDavidson",
   },
   {
     bioguideId: "D000628",
-    handle: "@DrNealDunnFL2",
+    handle: "DrNealDunnFL2",
   },
   {
     bioguideId: "D000629",
-    handle: "@RepDavids",
+    handle: "RepDavids",
   },
   {
     bioguideId: "D000631",
-    handle: "@RepDean",
+    handle: "RepDean",
   },
   {
     bioguideId: "D000632",
-    handle: "@RepDesposito",
+    handle: "RepDesposito",
   },
   {
     bioguideId: "D000633",
-    handle: "@RepDuarteCA13",
+    handle: "RepDuarteCA13",
   },
   {
     bioguideId: "E000071",
-    handle: "@RepEllzey",
+    handle: "RepEllzey",
   },
   {
     bioguideId: "E000215",
-    handle: "@RepAnnaEshoo",
+    handle: "RepAnnaEshoo",
   },
   {
     bioguideId: "E000235",
-    handle: "@RepEzell",
+    handle: "RepEzell",
   },
   {
     bioguideId: "E000246",
-    handle: "@RepEdwards",
+    handle: "RepEdwards",
   },
   {
     bioguideId: "E000294",
-    handle: "@RepTomEmmer",
+    handle: "RepTomEmmer",
   },
   {
     bioguideId: "E000295",
-    handle: "@SenJoniErnst",
+    handle: "SenJoniErnst",
   },
   {
     bioguideId: "E000296",
-    handle: "@RepDwightEvans",
+    handle: "RepDwightEvans",
   },
   {
     bioguideId: "E000297",
-    handle: "@RepEspaillat",
+    handle: "RepEspaillat",
   },
   {
     bioguideId: "E000298",
-    handle: "@RepRonEstes",
+    handle: "RepRonEstes",
   },
   {
     bioguideId: "E000299",
-    handle: "@RepEscobar",
+    handle: "RepEscobar",
   },
   {
     bioguideId: "F000062",
-    handle: "@SenFeinstein",
+    handle: "SenFeinstein",
   },
   {
     bioguideId: "F000246",
-    handle: "@RepPatFallon",
+    handle: "RepPatFallon",
   },
   {
     bioguideId: "F000446",
-    handle: "@RepFeenstra",
+    handle: "RepFeenstra",
   },
   {
     bioguideId: "F000450",
-    handle: "@virginiafoxx",
+    handle: "virginiafoxx",
   },
   {
     bioguideId: "F000454",
-    handle: "@RepBillFoster",
+    handle: "RepBillFoster",
   },
   {
     bioguideId: "F000459",
-    handle: "@RepChuck",
+    handle: "RepChuck",
   },
   {
     bioguideId: "F000462",
-    handle: "@RepLoisFrankel",
+    handle: "RepLoisFrankel",
   },
   {
     bioguideId: "F000463",
-    handle: "@SenatorFischer",
+    handle: "SenatorFischer",
   },
   {
     bioguideId: "F000465",
-    handle: "@RepDrewFerguson",
+    handle: "RepDrewFerguson",
   },
   {
     bioguideId: "F000466",
-    handle: "@RepBrianFitz",
+    handle: "RepBrianFitz",
   },
   {
     bioguideId: "F000468",
-    handle: "@RepFletcher",
+    handle: "RepFletcher",
   },
   {
     bioguideId: "F000469",
-    handle: "@RepRussFulcher",
+    handle: "RepRussFulcher",
   },
   {
     bioguideId: "F000470",
-    handle: "@RepFischbach",
+    handle: "RepFischbach",
   },
   {
     bioguideId: "F000471",
-    handle: "@RepFitzgerald",
+    handle: "RepFitzgerald",
   },
   {
     bioguideId: "F000472",
-    handle: "@RepFranklin",
+    handle: "RepFranklin",
   },
   {
     bioguideId: "F000474",
-    handle: "@USRepMikeFlood",
+    handle: "USRepMikeFlood",
   },
   {
     bioguideId: "F000475",
-    handle: "@repfinstad",
+    handle: "repfinstad",
   },
   {
     bioguideId: "F000476",
-    handle: "@RepMaxwellFrost",
+    handle: "RepMaxwellFrost",
   },
   {
     bioguideId: "F000477",
-    handle: "@ValerieFoushee",
+    handle: "ValerieFoushee",
   },
   {
     bioguideId: "F000478",
-    handle: "@RepRussellFry",
+    handle: "RepRussellFry",
   },
   {
     bioguideId: "F000479",
-    handle: "@SenFettermanPA",
+    handle: "SenFettermanPA",
   },
   {
     bioguideId: "G000061",
-    handle: "@RepMikeGarcia",
+    handle: "RepMikeGarcia",
   },
   {
     bioguideId: "G000359",
-    handle: "@LindseyGrahamSC",
+    handle: "LindseyGrahamSC",
   },
   {
     bioguideId: "G000377",
-    handle: "@RepKayGranger",
+    handle: "RepKayGranger",
   },
   {
     bioguideId: "G000386",
-    handle: "@ChuckGrassley",
+    handle: "ChuckGrassley",
   },
   {
     bioguideId: "G000546",
-    handle: "@RepSamGraves",
+    handle: "RepSamGraves",
   },
   {
     bioguideId: "G000551",
-    handle: "@RepRaulGrijalva",
+    handle: "RepRaulGrijalva",
   },
   {
     bioguideId: "G000553",
-    handle: "@RepAlGreen",
+    handle: "RepAlGreen",
   },
   {
     bioguideId: "G000555",
-    handle: "@SenGillibrand",
+    handle: "SenGillibrand",
   },
   {
     bioguideId: "G000558",
-    handle: "@RepGuthrie",
+    handle: "RepGuthrie",
   },
   {
     bioguideId: "G000559",
-    handle: "@RepGaramendi",
+    handle: "RepGaramendi",
   },
   {
     bioguideId: "G000565",
-    handle: "@RepGosar",
+    handle: "RepGosar",
   },
   {
     bioguideId: "G000568",
-    handle: "@RepMGriffith",
+    handle: "RepMGriffith",
   },
   {
     bioguideId: "G000574",
-    handle: "@RepRubenGallego",
+    handle: "RepRubenGallego",
   },
   {
     bioguideId: "G000576",
-    handle: "@RepGrothman",
+    handle: "RepGrothman",
   },
   {
     bioguideId: "G000577",
-    handle: "@RepGarretGraves",
+    handle: "RepGarretGraves",
   },
   {
     bioguideId: "G000578",
-    handle: "@RepMattGaetz",
+    handle: "RepMattGaetz",
   },
   {
     bioguideId: "G000579",
-    handle: "@RepGallagher",
+    handle: "RepGallagher",
   },
   {
     bioguideId: "G000581",
-    handle: "@RepGonzalez",
+    handle: "RepGonzalez",
   },
   {
     bioguideId: "G000582",
-    handle: "@RepJenniffer",
+    handle: "RepJenniffer",
   },
   {
     bioguideId: "G000583",
-    handle: "@RepJoshG",
+    handle: "RepJoshG",
   },
   {
     bioguideId: "G000585",
-    handle: "@RepJimmyGomez",
+    handle: "RepJimmyGomez",
   },
   {
     bioguideId: "G000586",
-    handle: "@RepChuyGarcia",
+    handle: "RepChuyGarcia",
   },
   {
     bioguideId: "G000587",
-    handle: "@RepSylviaGarcia",
+    handle: "RepSylviaGarcia",
   },
   {
     bioguideId: "G000589",
@@ -777,71 +777,71 @@
   },
   {
     bioguideId: "G000590",
-    handle: "@RepMarkGreen",
+    handle: "RepMarkGreen",
   },
   {
     bioguideId: "G000591",
-    handle: "@RepMichaelGuest",
+    handle: "RepMichaelGuest",
   },
   {
     bioguideId: "G000592",
-    handle: "@RepGolden",
+    handle: "RepGolden",
   },
   {
     bioguideId: "G000593",
-    handle: "@RepCarlos",
+    handle: "RepCarlos",
   },
   {
     bioguideId: "G000594",
-    handle: "@RepTonyGonzales",
+    handle: "RepTonyGonzales",
   },
   {
     bioguideId: "G000595",
-    handle: "@RepBobGood",
+    handle: "RepBobGood",
   },
   {
     bioguideId: "G000596",
-    handle: "@RepMTG",
+    handle: "RepMTG",
   },
   {
     bioguideId: "G000597",
-    handle: "@RepGarbarino",
+    handle: "RepGarbarino",
   },
   {
     bioguideId: "G000598",
-    handle: "@RepRobertGarcia",
+    handle: "RepRobertGarcia",
   },
   {
     bioguideId: "G000599",
-    handle: "@RepDanGoldman",
+    handle: "RepDanGoldman",
   },
   {
     bioguideId: "G000600",
-    handle: "@RepMGP",
+    handle: "RepMGP",
   },
   {
     bioguideId: "H000273",
-    handle: "@SenatorHick",
+    handle: "SenatorHick",
   },
   {
     bioguideId: "H000601",
-    handle: "@SenatorHagerty",
+    handle: "SenatorHagerty",
   },
   {
     bioguideId: "H000874",
-    handle: "@RepStenyHoyer",
+    handle: "RepStenyHoyer",
   },
   {
     bioguideId: "H001038",
-    handle: "@RepBrianHiggins",
+    handle: "RepBrianHiggins",
   },
   {
     bioguideId: "H001042",
-    handle: "@maziehirono",
+    handle: "maziehirono",
   },
   {
     bioguideId: "H001046",
-    handle: "@MartinHeinrich",
+    handle: "MartinHeinrich",
   },
   {
     bioguideId: "H001047",
@@ -849,891 +849,891 @@
   },
   {
     bioguideId: "H001052",
-    handle: "@RepAndyHarrisMD",
+    handle: "RepAndyHarrisMD",
   },
   {
     bioguideId: "H001058",
-    handle: "@RepHuizenga",
+    handle: "RepHuizenga",
   },
   {
     bioguideId: "H001061",
-    handle: "@SenJohnHoeven",
+    handle: "SenJohnHoeven",
   },
   {
     bioguideId: "H001066",
-    handle: "@RepHorsford",
+    handle: "RepHorsford",
   },
   {
     bioguideId: "H001067",
-    handle: "@RepRichHudson",
+    handle: "RepRichHudson",
   },
   {
     bioguideId: "H001068",
-    handle: "@RepHuffman",
+    handle: "RepHuffman",
   },
   {
     bioguideId: "H001072",
-    handle: "@RepFrenchHill",
+    handle: "RepFrenchHill",
   },
   {
     bioguideId: "H001076",
-    handle: "@SenatorHassan",
+    handle: "SenatorHassan",
   },
   {
     bioguideId: "H001077",
-    handle: "@RepClayHiggins",
+    handle: "RepClayHiggins",
   },
   {
     bioguideId: "H001079",
-    handle: "@SenHydeSmith",
+    handle: "SenHydeSmith",
   },
   {
     bioguideId: "H001081",
-    handle: "@RepJahanaHayes",
+    handle: "RepJahanaHayes",
   },
   {
     bioguideId: "H001082",
-    handle: "@repkevinhern",
+    handle: "repkevinhern",
   },
   {
     bioguideId: "H001085",
-    handle: "@RepHoulahan",
+    handle: "RepHoulahan",
   },
   {
     bioguideId: "H001086",
-    handle: "@RepHarshbarger",
+    handle: "RepHarshbarger",
   },
   {
     bioguideId: "H001089",
-    handle: "@HawleyMO",
+    handle: "HawleyMO",
   },
   {
     bioguideId: "H001090",
-    handle: "@RepJoshHarder",
+    handle: "RepJoshHarder",
   },
   {
     bioguideId: "H001091",
-    handle: "@RepAshleyHinson",
+    handle: "RepAshleyHinson",
   },
   {
     bioguideId: "H001093",
-    handle: "@RepHouchin",
+    handle: "RepHouchin",
   },
   {
     bioguideId: "H001094",
-    handle: "@repvalhoyle",
+    handle: "repvalhoyle",
   },
   {
     bioguideId: "H001095",
-    handle: "@RepWesleyHunt",
+    handle: "RepWesleyHunt",
   },
   {
     bioguideId: "H001096",
-    handle: "@RepHageman",
+    handle: "RepHageman",
   },
   {
     bioguideId: "I000056",
-    handle: "@repdarrellissa",
+    handle: "repdarrellissa",
   },
   {
     bioguideId: "I000058",
-    handle: "@RepGlennIvey",
+    handle: "RepGlennIvey",
   },
   {
     bioguideId: "J000032",
-    handle: "@JacksonLeeTX18",
+    handle: "JacksonLeeTX18",
   },
   {
     bioguideId: "J000288",
-    handle: "@RepHankJohnson",
+    handle: "RepHankJohnson",
   },
   {
     bioguideId: "J000289",
-    handle: "@Jim_Jordan",
+    handle: "Jim_Jordan",
   },
   {
     bioguideId: "J000292",
-    handle: "@RepBillJohnson",
+    handle: "RepBillJohnson",
   },
   {
     bioguideId: "J000293",
-    handle: "@SenRonJohnson",
+    handle: "SenRonJohnson",
   },
   {
     bioguideId: "J000294",
-    handle: "@RepJeffries",
+    handle: "RepJeffries",
   },
   {
     bioguideId: "J000295",
-    handle: "@RepDaveJoyce",
+    handle: "RepDaveJoyce",
   },
   {
     bioguideId: "J000298",
-    handle: "@RepJayapal",
+    handle: "RepJayapal",
   },
   {
     bioguideId: "J000299",
-    handle: "@RepMikeJohnson",
+    handle: "RepMikeJohnson",
   },
   {
     bioguideId: "J000301",
-    handle: "@RepDustyJohnson",
+    handle: "RepDustyJohnson",
   },
   {
     bioguideId: "J000302",
-    handle: "@RepJohnJoyce",
+    handle: "RepJohnJoyce",
   },
   {
     bioguideId: "J000304",
-    handle: "@RepRonnyJackson",
+    handle: "RepRonnyJackson",
   },
   {
     bioguideId: "J000305",
-    handle: "@RepSaraJacobs",
+    handle: "RepSaraJacobs",
   },
   {
     bioguideId: "J000307",
-    handle: "@RepJames",
+    handle: "RepJames",
   },
   {
     bioguideId: "J000308",
-    handle: "@RepJeffJackson",
+    handle: "RepJeffJackson",
   },
   {
     bioguideId: "J000309",
-    handle: "@rep_jackson",
+    handle: "rep_jackson",
   },
   {
     bioguideId: "K000009",
-    handle: "@RepMarcyKaptur",
+    handle: "RepMarcyKaptur",
   },
   {
     bioguideId: "K000367",
-    handle: "@SenAmyKlobuchar",
+    handle: "SenAmyKlobuchar",
   },
   {
     bioguideId: "K000367",
-    handle: "@SenAmyKlobuchar",
+    handle: "SenAmyKlobuchar",
   },
   {
     bioguideId: "K000375",
-    handle: "@USRepKeating",
+    handle: "USRepKeating",
   },
   {
     bioguideId: "K000376",
-    handle: "@MikeKellyPA",
+    handle: "MikeKellyPA",
   },
   {
     bioguideId: "K000376",
-    handle: "@SenMarkKelly",
+    handle: "SenMarkKelly",
   },
   {
     bioguideId: "K000379",
-    handle: "@SenJohnKennedy",
+    handle: "SenJohnKennedy",
   },
   {
     bioguideId: "K000380",
-    handle: "@RepDanKildee",
+    handle: "RepDanKildee",
   },
   {
     bioguideId: "K000381",
-    handle: "@RepDerekKilmer",
+    handle: "RepDerekKilmer",
   },
   {
     bioguideId: "K000382",
-    handle: "@RepAnnieKuster",
+    handle: "RepAnnieKuster",
   },
   {
     bioguideId: "K000383",
-    handle: "@SenAngusKing",
+    handle: "SenAngusKing",
   },
   {
     bioguideId: "K000383",
-    handle: "@SenAngusKing",
+    handle: "SenAngusKing",
   },
   {
     bioguideId: "K000384",
-    handle: "@timkaine",
+    handle: "timkaine",
   },
   {
     bioguideId: "K000385",
-    handle: "@RepRobinKelly",
+    handle: "RepRobinKelly",
   },
   {
     bioguideId: "K000388",
-    handle: "@RepTrentKelly",
+    handle: "RepTrentKelly",
   },
   {
     bioguideId: "K000389",
-    handle: "@RepRoKhanna",
+    handle: "RepRoKhanna",
   },
   {
     bioguideId: "K000391",
-    handle: "@CongressmanRaja",
+    handle: "CongressmanRaja",
   },
   {
     bioguideId: "K000392",
-    handle: "@RepDavidKustoff",
+    handle: "RepDavidKustoff",
   },
   {
     bioguideId: "K000394",
-    handle: "@RepAndyKimNJ",
+    handle: "RepAndyKimNJ",
   },
   {
     bioguideId: "K000397",
-    handle: "@RepYoungKim",
+    handle: "RepYoungKim",
   },
   {
     bioguideId: "K000398",
-    handle: "@CongressmanKean",
+    handle: "CongressmanKean",
   },
   {
     bioguideId: "K000399",
-    handle: "@RepKiggans",
+    handle: "RepKiggans",
   },
   {
     bioguideId: "K000400",
-    handle: "@RepKamlagerDove",
+    handle: "RepKamlagerDove",
   },
   {
     bioguideId: "K000401",
-    handle: "@RepKiley",
+    handle: "RepKiley",
   },
   {
     bioguideId: "L000266",
-    handle: "@RepLaTurner",
+    handle: "RepLaTurner",
   },
   {
     bioguideId: "L000273",
-    handle: "@RepTeresaLF",
+    handle: "RepTeresaLF",
   },
   {
     bioguideId: "L000397",
-    handle: "@RepZoeLofgren",
+    handle: "RepZoeLofgren",
   },
   {
     bioguideId: "L000491",
-    handle: "@RepFrankLucas",
+    handle: "RepFrankLucas",
   },
   {
     bioguideId: "L000551",
-    handle: "@RepBarbaraLee",
+    handle: "RepBarbaraLee",
   },
   {
     bioguideId: "L000557",
-    handle: "@RepJohnLarson",
+    handle: "RepJohnLarson",
   },
   {
     bioguideId: "L000560",
-    handle: "@RepRickLarsen",
+    handle: "RepRickLarsen",
   },
   {
     bioguideId: "L000562",
-    handle: "@RepStephenLynch",
+    handle: "RepStephenLynch",
   },
   {
     bioguideId: "L000564",
-    handle: "@RepDLamborn",
+    handle: "RepDLamborn",
   },
   {
     bioguideId: "L000566",
-    handle: "@boblatta",
+    handle: "boblatta",
   },
   {
     bioguideId: "L000569",
-    handle: "@RepBlaine",
+    handle: "RepBlaine",
   },
   {
     bioguideId: "L000570",
-    handle: "@SenatorLujan",
+    handle: "SenatorLujan",
   },
   {
     bioguideId: "L000571",
-    handle: "@SenLummis",
+    handle: "SenLummis",
   },
   {
     bioguideId: "L000571",
-    handle: "@SenLummis",
+    handle: "SenLummis",
   },
   {
     bioguideId: "L000575",
-    handle: "@SenatorLankford",
+    handle: "SenatorLankford",
   },
   {
     bioguideId: "L000575",
-    handle: "@SenatorLankford",
+    handle: "SenatorLankford",
   },
   {
     bioguideId: "L000577",
-    handle: "@SenMikeLee",
+    handle: "SenMikeLee",
   },
   {
     bioguideId: "L000577",
-    handle: "@SenMikeLee",
+    handle: "SenMikeLee",
   },
   {
     bioguideId: "L000578",
-    handle: "@RepLaMalfa",
+    handle: "RepLaMalfa",
   },
   {
     bioguideId: "L000582",
-    handle: "@RepTedLieu",
+    handle: "RepTedLieu",
   },
   {
     bioguideId: "L000583",
-    handle: "@RepLoudermilk",
+    handle: "RepLoudermilk",
   },
   {
     bioguideId: "L000585",
-    handle: "@RepLaHood",
+    handle: "RepLaHood",
   },
   {
     bioguideId: "L000589",
-    handle: "@RepDLesko",
+    handle: "RepDLesko",
   },
   {
     bioguideId: "L000590",
-    handle: "@RepSusieLee",
+    handle: "RepSusieLee",
   },
   {
     bioguideId: "L000593",
-    handle: "@RepMikeLevin",
+    handle: "RepMikeLevin",
   },
   {
     bioguideId: "L000595",
-    handle: "@repjulialetlow",
+    handle: "repjulialetlow",
   },
   {
     bioguideId: "L000596",
-    handle: "@RepLuna",
+    handle: "RepLuna",
   },
   {
     bioguideId: "L000597",
-    handle: "@RepLaurelLee",
+    handle: "RepLaurelLee",
   },
   {
     bioguideId: "L000598",
-    handle: "@RepLaLota",
+    handle: "RepLaLota",
   },
   {
     bioguideId: "L000599",
-    handle: "@RepMikeLawler",
+    handle: "RepMikeLawler",
   },
   {
     bioguideId: "L000600",
-    handle: "@RepLangworthy",
+    handle: "RepLangworthy",
   },
   {
     bioguideId: "L000601",
-    handle: "@RepGregLandsman",
+    handle: "RepGregLandsman",
   },
   {
     bioguideId: "L000602",
-    handle: "@RepSummerLee",
+    handle: "RepSummerLee",
   },
   {
     bioguideId: "L000603",
-    handle: "@RepLuttrell_TX8",
+    handle: "RepLuttrell_TX8",
   },
   {
     bioguideId: "M000133",
-    handle: "@SenMarkey",
+    handle: "SenMarkey",
   },
   {
     bioguideId: "M000194",
-    handle: "@RepNancyMace",
+    handle: "RepNancyMace",
   },
   {
     bioguideId: "M000312",
-    handle: "@RepMcGovern",
+    handle: "RepMcGovern",
   },
   {
     bioguideId: "M000317",
-    handle: "@RepMalliotakis",
+    handle: "RepMalliotakis",
   },
   {
     bioguideId: "M000355",
-    handle: "@LeaderMcConnell",
+    handle: "LeaderMcConnell",
   },
   {
     bioguideId: "M000639",
-    handle: "@RepMenendez",
+    handle: "RepMenendez",
   },
   {
     bioguideId: "M000639",
-    handle: "@SenatorMenendez",
+    handle: "SenatorMenendez",
   },
   {
     bioguideId: "M000687",
-    handle: "@RepKweisiMfume",
+    handle: "RepKweisiMfume",
   },
   {
     bioguideId: "M000871",
-    handle: "@RepMann",
+    handle: "RepMann",
   },
   {
     bioguideId: "M000934",
-    handle: "@JerryMoran",
+    handle: "JerryMoran",
   },
   {
     bioguideId: "M001111",
-    handle: "@PattyMurray",
+    handle: "PattyMurray",
   },
   {
     bioguideId: "M001135",
-    handle: "@RepKManning",
+    handle: "RepKManning",
   },
   {
     bioguideId: "M001136",
-    handle: "@RepLisaMcClain",
+    handle: "RepLisaMcClain",
   },
   {
     bioguideId: "M001137",
-    handle: "@RepGregoryMeeks",
+    handle: "RepGregoryMeeks",
   },
   {
     bioguideId: "M001143",
-    handle: "@BettyMcCollum04",
+    handle: "BettyMcCollum04",
   },
   {
     bioguideId: "M001153",
-    handle: "@lisamurkowski",
+    handle: "lisamurkowski",
   },
   {
     bioguideId: "M001156",
-    handle: "@PatrickMcHenry",
+    handle: "PatrickMcHenry",
   },
   {
     bioguideId: "M001157",
-    handle: "@RepMcCaul",
+    handle: "RepMcCaul",
   },
   {
     bioguideId: "M001159",
-    handle: "@cathymcmorris",
+    handle: "cathymcmorris",
   },
   {
     bioguideId: "M001160",
-    handle: "@RepGwenMoore",
+    handle: "RepGwenMoore",
   },
   {
     bioguideId: "M001163",
-    handle: "@DorisMatsui",
+    handle: "DorisMatsui",
   },
   {
     bioguideId: "M001165",
-    handle: "@SpeakerMcCarthy",
+    handle: "SpeakerMcCarthy",
   },
   {
     bioguideId: "M001169",
-    handle: "@ChrisMurphyCT",
+    handle: "ChrisMurphyCT",
   },
   {
     bioguideId: "M001176",
-    handle: "@SenJeffMerkley",
+    handle: "SenJeffMerkley",
   },
   {
     bioguideId: "M001177",
-    handle: "@RepMcClintock",
+    handle: "RepMcClintock",
   },
   {
     bioguideId: "M001183",
-    handle: "@Sen_JoeManchin",
+    handle: "Sen_JoeManchin",
   },
   {
     bioguideId: "M001184",
-    handle: "@RepThomasMassie",
+    handle: "RepThomasMassie",
   },
   {
     bioguideId: "M001188",
-    handle: "@RepGraceMeng",
+    handle: "RepGraceMeng",
   },
   {
     bioguideId: "M001190",
-    handle: "@SenMullin",
+    handle: "SenMullin",
   },
   {
     bioguideId: "M001194",
-    handle: "@RepMoolenaar",
+    handle: "RepMoolenaar",
   },
   {
     bioguideId: "M001195",
-    handle: "@RepAlexMooney",
+    handle: "RepAlexMooney",
   },
   {
     bioguideId: "M001196",
-    handle: "@teammoulton",
+    handle: "teammoulton",
   },
   {
     bioguideId: "M001198",
-    handle: "@SenatorMarshall",
+    handle: "SenatorMarshall",
   },
   {
     bioguideId: "M001199",
-    handle: "@RepBrianMast",
+    handle: "RepBrianMast",
   },
   {
     bioguideId: "M001204",
-    handle: "@RepMeuser",
+    handle: "RepMeuser",
   },
   {
     bioguideId: "M001205",
-    handle: "@RepCarolMiller",
+    handle: "RepCarolMiller",
   },
   {
     bioguideId: "M001206",
-    handle: "@RepJoeMorelle",
+    handle: "RepJoeMorelle",
   },
   {
     bioguideId: "M001208",
-    handle: "@RepLucyMcBath",
+    handle: "RepLucyMcBath",
   },
   {
     bioguideId: "M001210",
-    handle: "@RepGregMurphy",
+    handle: "RepGregMurphy",
   },
   {
     bioguideId: "M001212",
-    handle: "@RepBarryMoore",
+    handle: "RepBarryMoore",
   },
   {
     bioguideId: "M001213",
-    handle: "@RepBlakeMoore",
+    handle: "RepBlakeMoore",
   },
   {
     bioguideId: "M001214",
-    handle: "@RepMrvan",
+    handle: "RepMrvan",
   },
   {
     bioguideId: "M001215",
-    handle: "@RepMMM",
+    handle: "RepMMM",
   },
   {
     bioguideId: "M001216",
-    handle: "@RepMillsPress",
+    handle: "RepMillsPress",
   },
   {
     bioguideId: "M001217",
-    handle: "@RepMoskowitz",
+    handle: "RepMoskowitz",
   },
   {
     bioguideId: "M001218",
-    handle: "@RepMcCormick",
+    handle: "RepMcCormick",
   },
   {
     bioguideId: "M001219",
-    handle: "@JMoylanforGuam",
+    handle: "JMoylanforGuam",
   },
   {
     bioguideId: "M001220",
-    handle: "@RepMcGarvey",
+    handle: "RepMcGarvey",
   },
   {
     bioguideId: "M001221",
-    handle: "@RepMaryMiller",
+    handle: "RepMaryMiller",
   },
   {
     bioguideId: "M001221",
-    handle: "@RepMolinaroNY19",
+    handle: "RepMolinaroNY19",
   },
   {
     bioguideId: "M001222",
-    handle: "@RepMaxMiller",
+    handle: "RepMaxMiller",
   },
   {
     bioguideId: "M001223",
-    handle: "@Rep_Magaziner",
+    handle: "Rep_Magaziner",
   },
   {
     bioguideId: "M001224",
-    handle: "@RepNateMoran",
+    handle: "RepNateMoran",
   },
   {
     bioguideId: "M001225",
-    handle: "@RepMullin",
+    handle: "RepMullin",
   },
   {
     bioguideId: "N000002",
-    handle: "@RepJerryNadler",
+    handle: "RepJerryNadler",
   },
   {
     bioguideId: "N000015",
-    handle: "@RepRichardNeal",
+    handle: "RepRichardNeal",
   },
   {
     bioguideId: "N000026",
-    handle: "@RepTroyNehls",
+    handle: "RepTroyNehls",
   },
   {
     bioguideId: "N000147",
-    handle: "@EleanorNorton",
+    handle: "EleanorNorton",
   },
   {
     bioguideId: "N000179",
-    handle: "@gracenapolitano",
+    handle: "gracenapolitano",
   },
   {
     bioguideId: "N000188",
-    handle: "@DonaldNorcross",
+    handle: "DonaldNorcross",
   },
   {
     bioguideId: "N000189",
-    handle: "@RepNewhouse",
+    handle: "RepNewhouse",
   },
   {
     bioguideId: "N000190",
-    handle: "@RepRalphNorman",
+    handle: "RepRalphNorman",
   },
   {
     bioguideId: "N000191",
-    handle: "@RepJoeNeguse",
+    handle: "RepJoeNeguse",
   },
   {
     bioguideId: "N000193",
-    handle: "@ZachNunn",
+    handle: "ZachNunn",
   },
   {
     bioguideId: "N000194",
-    handle: "@RepWileyNickel",
+    handle: "RepWileyNickel",
   },
   {
     bioguideId: "O000019",
-    handle: "@JayObernolte",
+    handle: "JayObernolte",
   },
   {
     bioguideId: "O000086",
-    handle: "@RepBurgessOwens",
+    handle: "RepBurgessOwens",
   },
   {
     bioguideId: "O000172",
-    handle: "@RepAOC",
+    handle: "RepAOC",
   },
   {
     bioguideId: "O000173",
-    handle: "@Ilhan",
+    handle: "Ilhan",
   },
   {
     bioguideId: "O000174",
-    handle: "@ossoff",
+    handle: "ossoff",
   },
   {
     bioguideId: "O000175",
-    handle: "@RepOgles",
+    handle: "RepOgles",
   },
   {
     bioguideId: "P000034",
-    handle: "@FrankPallone",
+    handle: "FrankPallone",
   },
   {
     bioguideId: "P000048",
-    handle: "@RepPfluger",
+    handle: "RepPfluger",
   },
   {
     bioguideId: "P000096",
-    handle: "@BillPascrell",
+    handle: "BillPascrell",
   },
   {
     bioguideId: "P000145",
-    handle: "@SenAlexPadilla",
+    handle: "SenAlexPadilla",
   },
   {
     bioguideId: "P000197",
-    handle: "@SpeakerPelosi",
+    handle: "SpeakerPelosi",
   },
   {
     bioguideId: "P000583",
-    handle: "@RandPaul",
+    handle: "RandPaul",
   },
   {
     bioguideId: "P000595",
-    handle: "@SenGaryPeters",
+    handle: "SenGaryPeters",
   },
   {
     bioguideId: "P000597",
-    handle: "@chelliepingree",
+    handle: "chelliepingree",
   },
   {
     bioguideId: "P000599",
-    handle: "@congbillposey",
+    handle: "congbillposey",
   },
   {
     bioguideId: "P000604",
-    handle: "@RepDonaldPayne",
+    handle: "RepDonaldPayne",
   },
   {
     bioguideId: "P000605",
-    handle: "@RepScottPerry",
+    handle: "RepScottPerry",
   },
   {
     bioguideId: "P000607",
-    handle: "@repmarkpocan",
+    handle: "repmarkpocan",
   },
   {
     bioguideId: "P000608",
-    handle: "@RepScottPeters",
+    handle: "RepScottPeters",
   },
   {
     bioguideId: "P000609",
-    handle: "@USRepGaryPalmer",
+    handle: "USRepGaryPalmer",
   },
   {
     bioguideId: "P000610",
-    handle: "@StaceyPlaskett",
+    handle: "StaceyPlaskett",
   },
   {
     bioguideId: "P000613",
-    handle: "@RepJimmyPanetta",
+    handle: "RepJimmyPanetta",
   },
   {
     bioguideId: "P000614",
-    handle: "@RepChrisPappas",
+    handle: "RepChrisPappas",
   },
   {
     bioguideId: "P000615",
-    handle: "@RepGregPence",
+    handle: "RepGregPence",
   },
   {
     bioguideId: "P000616",
-    handle: "@RepDeanPhillips",
+    handle: "RepDeanPhillips",
   },
   {
     bioguideId: "P000617",
-    handle: "@RepPressley",
+    handle: "RepPressley",
   },
   {
     bioguideId: "P000618",
-    handle: "@RepKatiePorter",
+    handle: "RepKatiePorter",
   },
   {
     bioguideId: "P000619",
-    handle: "@Rep_Peltola",
+    handle: "Rep_Peltola",
   },
   {
     bioguideId: "P000620",
-    handle: "@RepPettersen",
+    handle: "RepPettersen",
   },
   {
     bioguideId: "Q000023",
-    handle: "@RepMikeQuigley",
+    handle: "RepMikeQuigley",
   },
   {
     bioguideId: "R000103",
-    handle: "@RepRosendale",
+    handle: "RepRosendale",
   },
   {
     bioguideId: "R000122",
-    handle: "@SenJackReed",
+    handle: "SenJackReed",
   },
   {
     bioguideId: "R000305",
-    handle: "@RepDeborahRoss",
+    handle: "RepDeborahRoss",
   },
   {
     bioguideId: "R000395",
-    handle: "@RepHalRogers",
+    handle: "RepHalRogers",
   },
   {
     bioguideId: "R000575",
-    handle: "@RepMikeRogersAL",
+    handle: "RepMikeRogersAL",
   },
   {
     bioguideId: "R000576",
-    handle: "@Call_Me_Dutch",
+    handle: "Call_Me_Dutch",
   },
   {
     bioguideId: "R000579",
-    handle: "@RepPatRyanNY",
+    handle: "RepPatRyanNY",
   },
   {
     bioguideId: "R000584",
-    handle: "@SenatorRisch",
+    handle: "SenatorRisch",
   },
   {
     bioguideId: "R000595",
-    handle: "@marcorubio",
+    handle: "marcorubio",
   },
   {
     bioguideId: "R000599",
-    handle: "@RepRaulRuizMD",
+    handle: "RepRaulRuizMD",
   },
   {
     bioguideId: "R000600",
-    handle: "@RepAmata",
+    handle: "RepAmata",
   },
   {
     bioguideId: "R000603",
-    handle: "@RepDavidRouzer",
+    handle: "RepDavidRouzer",
   },
   {
     bioguideId: "R000605",
-    handle: "@SenatorRounds",
+    handle: "SenatorRounds",
   },
   {
     bioguideId: "R000606",
-    handle: "@RepRaskin",
+    handle: "RepRaskin",
   },
   {
     bioguideId: "R000608",
-    handle: "@SenJackyRosen",
+    handle: "SenJackyRosen",
   },
   {
     bioguideId: "R000609",
-    handle: "@RepRutherfordFL",
+    handle: "RepRutherfordFL",
   },
   {
     bioguideId: "R000610",
-    handle: "@GReschenthaler",
+    handle: "GReschenthaler",
   },
   {
     bioguideId: "R000612",
-    handle: "@RepJohnRose",
+    handle: "RepJohnRose",
   },
   {
     bioguideId: "R000614",
-    handle: "@RepChipRoy",
+    handle: "RepChipRoy",
   },
   {
     bioguideId: "R000615",
-    handle: "@SenatorRomney",
+    handle: "SenatorRomney",
   },
   {
     bioguideId: "R000617",
-    handle: "@repdeliaramirez",
+    handle: "repdeliaramirez",
   },
   {
     bioguideId: "R000618",
-    handle: "@SenatorRicketts",
+    handle: "SenatorRicketts",
   },
   {
     bioguideId: "S000033",
-    handle: "@SenSanders",
+    handle: "SenSanders",
   },
   {
     bioguideId: "S000148",
-    handle: "@SenSchumer",
+    handle: "SenSchumer",
   },
   {
     bioguideId: "S000168",
-    handle: "@RepMariaSalazar",
+    handle: "RepMariaSalazar",
   },
   {
     bioguideId: "S000185",
-    handle: "@BobbyScott",
+    handle: "BobbyScott",
   },
   {
     bioguideId: "S000185",
-    handle: "@SenRickScott",
+    handle: "SenRickScott",
   },
   {
     bioguideId: "S000250",
-    handle: "@PeteSessions",
+    handle: "PeteSessions",
   },
   {
     bioguideId: "S000344",
-    handle: "@BradSherman",
+    handle: "BradSherman",
   },
   {
     bioguideId: "S000510",
-    handle: "@RepAdamSmith",
+    handle: "RepAdamSmith",
   },
   {
     bioguideId: "S000522",
@@ -1741,438 +1741,438 @@
   },
   {
     bioguideId: "S000770",
-    handle: "@SenStabenow",
+    handle: "SenStabenow",
   },
   {
     bioguideId: "S000929",
-    handle: "@RepSpartz",
+    handle: "RepSpartz",
   },
   {
     bioguideId: "S001135",
-    handle: "@RepSteel",
+    handle: "RepSteel",
   },
   {
     bioguideId: "S001145",
-    handle: "@RepSchakowsky",
+    handle: "RepSchakowsky",
   },
   {
     bioguideId: "S001148",
-    handle: "@CongMikeSimpson",
+    handle: "CongMikeSimpson",
   },
   {
     bioguideId: "S001150",
-    handle: "@RepAdamSchiff",
+    handle: "RepAdamSchiff",
   },
   {
     bioguideId: "S001156",
-    handle: "@RepLindaSanchez",
+    handle: "RepLindaSanchez",
   },
   {
     bioguideId: "S001157",
-    handle: "@repdavidscott",
+    handle: "repdavidscott",
   },
   {
     bioguideId: "S001159",
-    handle: "@RepStricklandWA",
+    handle: "RepStricklandWA",
   },
   {
     bioguideId: "S001168",
-    handle: "@RepSarbanes",
+    handle: "RepSarbanes",
   },
   {
     bioguideId: "S001172",
-    handle: "@RepAdrianSmith",
+    handle: "RepAdrianSmith",
   },
   {
     bioguideId: "S001176",
-    handle: "@SteveScalise",
+    handle: "SteveScalise",
   },
   {
     bioguideId: "S001177",
-    handle: "@Kilili_Sablan",
+    handle: "Kilili_Sablan",
   },
   {
     bioguideId: "S001181",
-    handle: "@SenatorShaheen",
+    handle: "SenatorShaheen",
   },
   {
     bioguideId: "S001183",
-    handle: "@RepDavid",
+    handle: "RepDavid",
   },
   {
     bioguideId: "S001184",
-    handle: "@SenatorTimScott",
+    handle: "SenatorTimScott",
   },
   {
     bioguideId: "S001185",
-    handle: "@RepTerriSewell",
+    handle: "RepTerriSewell",
   },
   {
     bioguideId: "S001189",
-    handle: "@AustinScottGA08",
+    handle: "AustinScottGA08",
   },
   {
     bioguideId: "S001190",
-    handle: "@RepSchneider",
+    handle: "RepSchneider",
   },
   {
     bioguideId: "S001191",
-    handle: "@SenatorSinema",
+    handle: "SenatorSinema",
   },
   {
     bioguideId: "S001192",
-    handle: "@RepChrisStewart",
+    handle: "RepChrisStewart",
   },
   {
     bioguideId: "S001193",
-    handle: "@RepSwalwell",
+    handle: "RepSwalwell",
   },
   {
     bioguideId: "S001194",
-    handle: "@SenBrianSchatz",
+    handle: "SenBrianSchatz",
   },
   {
     bioguideId: "S001195",
-    handle: "@RepJasonSmith",
+    handle: "RepJasonSmith",
   },
   {
     bioguideId: "S001196",
-    handle: "@RepStefanik",
+    handle: "RepStefanik",
   },
   {
     bioguideId: "S001198",
-    handle: "@SenDanSullivan",
+    handle: "SenDanSullivan",
   },
   {
     bioguideId: "S001199",
-    handle: "@RepSmucker",
+    handle: "RepSmucker",
   },
   {
     bioguideId: "S001200",
-    handle: "@RepDarrenSoto",
+    handle: "RepDarrenSoto",
   },
   {
     bioguideId: "S001203",
-    handle: "@SenTinaSmith",
+    handle: "SenTinaSmith",
   },
   {
     bioguideId: "S001204",
-    handle: "@GuamCongressman",
+    handle: "GuamCongressman",
   },
   {
     bioguideId: "S001205",
-    handle: "@RepMGS",
+    handle: "RepMGS",
   },
   {
     bioguideId: "S001207",
-    handle: "@RepSherrill",
+    handle: "RepSherrill",
   },
   {
     bioguideId: "S001208",
-    handle: "@RepSlotkin",
+    handle: "RepSlotkin",
   },
   {
     bioguideId: "S001209",
-    handle: "@RepSpanberger",
+    handle: "RepSpanberger",
   },
   {
     bioguideId: "S001211",
-    handle: "@RepGregStanton",
+    handle: "RepGregStanton",
   },
   {
     bioguideId: "S001212",
-    handle: "@RepPeteStauber",
+    handle: "RepPeteStauber",
   },
   {
     bioguideId: "S001213",
-    handle: "@RepBryanSteil",
+    handle: "RepBryanSteil",
   },
   {
     bioguideId: "S001214",
-    handle: "@RepGregSteube",
+    handle: "RepGregSteube",
   },
   {
     bioguideId: "S001215",
-    handle: "@RepHaleyStevens",
+    handle: "RepHaleyStevens",
   },
   {
     bioguideId: "S001216",
-    handle: "@RepKimSchrier",
+    handle: "RepKimSchrier",
   },
   {
     bioguideId: "S001218",
-    handle: "@Rep_Stansbury",
+    handle: "Rep_Stansbury",
   },
   {
     bioguideId: "S001220",
-    handle: "@RepDaleStrong",
+    handle: "RepDaleStrong",
   },
   {
     bioguideId: "S001221",
-    handle: "@RepScholten",
+    handle: "RepScholten",
   },
   {
     bioguideId: "S001222",
-    handle: "@RepSantosNY03",
+    handle: "RepSantosNY03",
   },
   {
     bioguideId: "S001223",
-    handle: "@RepEmiliaSykes",
+    handle: "RepEmiliaSykes",
   },
   {
     bioguideId: "S001224",
-    handle: "@RepKeithSelf",
+    handle: "RepKeithSelf",
   },
   {
     bioguideId: "S001225",
-    handle: "@RepEricSorensen",
+    handle: "RepEricSorensen",
   },
   {
     bioguideId: "S001226",
-    handle: "@RepSalinas",
+    handle: "RepSalinas",
   },
   {
     bioguideId: "S001227",
-    handle: "@SenEricSchmitt",
+    handle: "SenEricSchmitt",
   },
   {
     bioguideId: "T000165",
-    handle: "@RepTiffany",
+    handle: "RepTiffany",
   },
   {
     bioguideId: "T000193",
-    handle: "@BennieGThompson",
+    handle: "BennieGThompson",
   },
   {
     bioguideId: "T000250",
-    handle: "@SenJohnThune",
+    handle: "SenJohnThune",
   },
   {
     bioguideId: "T000460",
-    handle: "@RepThompson",
+    handle: "RepThompson",
   },
   {
     bioguideId: "T000463",
-    handle: "@RepMikeTurner",
+    handle: "RepMikeTurner",
   },
   {
     bioguideId: "T000464",
-    handle: "@SenatorTester",
+    handle: "SenatorTester",
   },
   {
     bioguideId: "T000467",
-    handle: "@CongressmanGT",
+    handle: "CongressmanGT",
   },
   {
     bioguideId: "T000468",
-    handle: "@repdinatitus",
+    handle: "repdinatitus",
   },
   {
     bioguideId: "T000469",
-    handle: "@RepPaulTonko",
+    handle: "RepPaulTonko",
   },
   {
     bioguideId: "T000472",
-    handle: "@RepMarkTakano",
+    handle: "RepMarkTakano",
   },
   {
     bioguideId: "T000474",
-    handle: "@NormaJTorres",
+    handle: "NormaJTorres",
   },
   {
     bioguideId: "T000476",
-    handle: "@SenThomTillis",
+    handle: "SenThomTillis",
   },
   {
     bioguideId: "T000478",
-    handle: "@RepTenney",
+    handle: "RepTenney",
   },
   {
     bioguideId: "T000480",
-    handle: "@RepTimmons",
+    handle: "RepTimmons",
   },
   {
     bioguideId: "T000481",
-    handle: "@RepRashida",
+    handle: "RepRashida",
   },
   {
     bioguideId: "T000482",
-    handle: "@RepLoriTrahan",
+    handle: "RepLoriTrahan",
   },
   {
     bioguideId: "T000483",
-    handle: "@RepDavidTrone",
+    handle: "RepDavidTrone",
   },
   {
     bioguideId: "T000486",
-    handle: "@RepRitchie",
+    handle: "RepRitchie",
   },
   {
     bioguideId: "T000487",
-    handle: "@RepJillTokuda",
+    handle: "RepJillTokuda",
   },
   {
     bioguideId: "T000488",
-    handle: "@RepShriThanedar",
+    handle: "RepShriThanedar",
   },
   {
     bioguideId: "U000040",
-    handle: "@RepUnderwood",
+    handle: "RepUnderwood",
   },
   {
     bioguideId: "V000081",
-    handle: "@NydiaVelazquez",
+    handle: "NydiaVelazquez",
   },
   {
     bioguideId: "V000128",
-    handle: "@ChrisVanHollen",
+    handle: "ChrisVanHollen",
   },
   {
     bioguideId: "V000129",
-    handle: "@RepDavidValadao",
+    handle: "RepDavidValadao",
   },
   {
     bioguideId: "V000130",
-    handle: "@RepJuanVargas",
+    handle: "RepJuanVargas",
   },
   {
     bioguideId: "V000131",
-    handle: "@RepVeasey",
+    handle: "RepVeasey",
   },
   {
     bioguideId: "V000133",
-    handle: "@Congressman_JVD",
+    handle: "Congressman_JVD",
   },
   {
     bioguideId: "V000134",
-    handle: "@RepBethVanDuyne",
+    handle: "RepBethVanDuyne",
   },
   {
     bioguideId: "V000135",
-    handle: "@RepVanOrden",
+    handle: "RepVanOrden",
   },
   {
     bioguideId: "V000136",
-    handle: "@RepGabeVasquez",
+    handle: "RepGabeVasquez",
   },
   {
     bioguideId: "V000137",
-    handle: "@SenVancePress",
+    handle: "SenVancePress",
   },
   {
     bioguideId: "W000187",
-    handle: "@RepMaxineWaters",
+    handle: "RepMaxineWaters",
   },
   {
     bioguideId: "W000437",
-    handle: "@RonWyden",
+    handle: "RonWyden",
   },
   {
     bioguideId: "W000779",
-    handle: "@RonWyden",
+    handle: "RonWyden",
   },
   {
     bioguideId: "W000788",
-    handle: "@RepNikema",
+    handle: "RepNikema",
   },
   {
     bioguideId: "W000790",
-    handle: "@SenatorWarnock",
+    handle: "SenatorWarnock",
   },
   {
     bioguideId: "W000795",
-    handle: "@RepJoeWilson",
+    handle: "RepJoeWilson",
   },
   {
     bioguideId: "W000797",
-    handle: "@RepDWStweets",
+    handle: "RepDWStweets",
   },
   {
     bioguideId: "W000798",
-    handle: "@RepWalberg",
+    handle: "RepWalberg",
   },
   {
     bioguideId: "W000800",
-    handle: "@PeterWelch",
+    handle: "PeterWelch",
   },
   {
     bioguideId: "W000802",
-    handle: "@SenWhitehouse",
+    handle: "SenWhitehouse",
   },
   {
     bioguideId: "W000804",
-    handle: "@RobWittman",
+    handle: "RobWittman",
   },
   {
     bioguideId: "W000805",
-    handle: "@MarkWarner",
+    handle: "MarkWarner",
   },
   {
     bioguideId: "W000806",
-    handle: "@RepWebster",
+    handle: "RepWebster",
   },
   {
     bioguideId: "W000808",
-    handle: "@RepWilson",
+    handle: "RepWilson",
   },
   {
     bioguideId: "W000809",
-    handle: "@rep_stevewomack",
+    handle: "rep_stevewomack",
   },
   {
     bioguideId: "W000812",
-    handle: "@RepAnnWagner",
+    handle: "RepAnnWagner",
   },
   {
     bioguideId: "W000814",
-    handle: "@TXRandy14",
+    handle: "TXRandy14",
   },
   {
     bioguideId: "W000815",
-    handle: "@RepBradWenstrup",
+    handle: "RepBradWenstrup",
   },
   {
     bioguideId: "W000816",
-    handle: "@RepRWilliams",
+    handle: "RepRWilliams",
   },
   {
     bioguideId: "W000817",
-    handle: "@SenWarren",
+    handle: "SenWarren",
   },
   {
     bioguideId: "W000821",
-    handle: "@RepWesterman",
+    handle: "RepWesterman",
   },
   {
     bioguideId: "W000822",
-    handle: "@RepBonnie",
+    handle: "RepBonnie",
   },
   {
     bioguideId: "W000823",
-    handle: "@RepWaltzPress",
+    handle: "RepWaltzPress",
   },
   {
     bioguideId: "W000825",
-    handle: "@RepWexton",
+    handle: "RepWexton",
   },
   {
     bioguideId: "W000826",
-    handle: "@RepSusanWild",
+    handle: "RepSusanWild",
   },
   {
     bioguideId: "W000828",
-    handle: "@RepWilliams",
+    handle: "RepWilliams",
   },
   {
     bioguideId: "Y000064",
-    handle: "@SenToddYoung",
+    handle: "SenToddYoung",
   },
   {
     bioguideId: "Y000067",
-    handle: "@RepRudyYakym",
+    handle: "RepRudyYakym",
   },
   {
     bioguideId: "Z000018",
-    handle: "@RepRyanZinke",
+    handle: "RepRyanZinke",
   },
 ];
