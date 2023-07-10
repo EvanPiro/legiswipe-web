@@ -43,7 +43,7 @@ export const handler = schedule(
   "0 */2 * * *",
   async (event) =>
     await pipe(
-      getRawResp(160)(80)(congressApiKey),
+      getRawResp(0)(100)(congressApiKey),
       te.chain(rawRespToBillsResp),
       te.map(billRespToBillItems),
       te.chain(saveBillItems(tweetReceiptTable)(billsTableName)(client)),
