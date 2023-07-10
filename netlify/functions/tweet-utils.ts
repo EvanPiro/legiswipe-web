@@ -264,11 +264,13 @@ const sendTweet =
           "https://api.twitter.com/2/tweets",
           tweet
         );
+
+        console.log(data);
         return {
           id: billQueueItem.id,
           bill,
           tweet,
-          tweet_id: data.id,
+          tweet_id: data.data.id,
           time_sent: new Date().getTime(),
         };
       },
