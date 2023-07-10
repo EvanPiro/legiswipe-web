@@ -196,17 +196,17 @@ const billIdToLink = (bill: IBillId) => {
   const base = `https://www.congress.gov/bill/118th-congress`;
   switch (bill.type) {
     case "S":
-      return `${base}/senate-bill/${bill.number}`;
+      return `${base}/senate-bill/${bill.number}/text`;
     case "HJRES":
-      return `${base}/house-joint-resolution/${bill.number}`;
+      return `${base}/house-joint-resolution/${bill.number}/text`;
     case "SRES":
-      return `${base}/senate-resolution/${bill.number}`;
+      return `${base}/senate-resolution/${bill.number}/text`;
     case "HR":
-      return `${base}/house-bill/${bill.number}`;
+      return `${base}/house-bill/${bill.number}/text`;
     case "HRES":
-      return `${base}/house-resolution/${bill.number}`;
+      return `${base}/house-resolution/${bill.number}/text`;
     default:
-      return `${base}/senate-bill/${bill.number}`;
+      return `${base}/senate-bill/${bill.number}/text`;
   }
 };
 ``;
