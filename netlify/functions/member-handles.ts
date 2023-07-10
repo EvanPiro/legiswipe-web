@@ -1,4 +1,4 @@
-[
+export const handles = [
   {
     bioguideId: "A000055",
     handle: "Robert_Aderholt",
