@@ -7,6 +7,8 @@ import {
   DeleteItemCommand,
   DeleteItemInput,
   DynamoDBClient,
+  GetItemCommand,
+  GetItemCommandInput,
   PutItemCommand,
   PutItemCommandInput,
   ScanCommand,
@@ -17,8 +19,11 @@ import { marshall, unmarshall } from "@aws-sdk/util-dynamodb";
 import addOAuthInterceptor, { OAuthInterceptorConfig } from "axios-oauth-1.0a";
 import { handles } from "./member-handles";
 
-export const congressApiBillsUrl = (congressApiKey: string) =>
-  "https://api.congress.gov/v3/bill?api_key=" + congressApiKey;
+export const congressApiBillsUrl =
+  (congressApiKey: string) =>
+  (offset: number) =>
+  (limit: number): string =>
+    `https://api.congress.gov/v3/bill?offset=${offset}&limit=${limit}&api_key=${congressApiKey}`;
 
 const authCongressApiUrl = (url: string) => (congressApiKey: string) =>
   `${url}&api_key=${congressApiKey}`;
@@ -40,6 +45,8 @@ const BillMetadata = t.type({
   originChamberCode: t.string,
   number: t.string,
   url: t.string,
+  type: t.string,
+  title: t.string,
   latestAction: LatestAction,
 });
 
@@ -68,10 +75,10 @@ const Sponsor = t.type({
 });
 
 const BillItem = t.type({
-  congress: t.number,
-  number: t.string,
   title: t.string,
+  congress: t.number,
   type: t.string,
+  number: t.string,
   originChamber: t.string,
   sponsors: t.array(Sponsor),
   latestAction: LatestAction,
@@ -95,6 +102,20 @@ const BillTweetReceipt = t.type({
 
 type IBillTweetReceipt = t.TypeOf<typeof BillTweetReceipt>;
 
+export const Action = t.type({
+  action: t.string,
+  id: t.string,
+  date: t.string,
+  title: t.string,
+  type: t.string,
+  number: t.string,
+  url: t.string,
+  htmlUrl: t.string,
+  congress: t.number,
+});
+
+export type IAction = t.TypeOf<typeof Action>;
+
 export const rawRespToBillsResp = (resp: any): TaskEither<string, IBillsResp> =>
   pipe(
     te.fromEither(BillsResp.decode(resp)),
@@ -117,7 +138,8 @@ const getLatestRawBillTweetQueueItem =
 
         const res = await ddb.send(command);
         console.log(res.Items);
-        return unmarshall(res.Items[0]);
+        const firstItem: any = res?.Items[0];
+        return unmarshall(firstItem);
       },
       (err) => {
         console.log(err);
@@ -165,7 +187,12 @@ const rawBillItemToBillResp = (resp: any): TaskEither<string, IBillResp> =>
     })
   );
 
-const billToLink = (bill: IBillItem) => {
+interface IBillId {
+  type: string;
+  number: string;
+}
+
+const billIdToLink = (bill: IBillId) => {
   const base = `https://www.congress.gov/bill/118th-congress`;
   switch (bill.type) {
     case "S":
@@ -204,7 +231,7 @@ const billRespToTweetTuple = ({ bill }: IBillResp): [IBillItem, any] => {
 
 Status: ${actionShort}
 
-${billToLink(bill)}
+${billIdToLink(bill)}
 
 Sponsor: ${sponsor}`,
     poll: {
@@ -331,3 +358,104 @@ export const tweetLatestBill =
         }
       )
     )();
+
+const billMetadataToBillItem = ({
+  congress,
+  originChamberCode,
+  latestAction,
+  number,
+  url,
+}: IBillMetadata): IBillTweetQueueItem => ({
+  id: `${congress + ""}_${originChamberCode}_${number}_${
+    latestAction.actionDate
+  }_${latestAction.text.slice(0, 80)}`,
+  timestamp_added: new Date().getTime(),
+  url,
+});
+
+export const billMetadataToAction = (bill: IBillMetadata): IAction => ({
+  action: bill.latestAction.text,
+  id: `${bill.congress}/${bill.type}/${bill.number}`,
+  date: bill.latestAction.actionDate,
+  type: bill.type,
+  number: bill.number,
+  title: bill.title,
+  url: bill.url,
+  htmlUrl: billIdToLink(bill),
+  congress: bill.congress,
+});
+
+export const getRawResp =
+  (offset: number) =>
+  (limit: number) =>
+  (congressApiKey: string): TaskEither<string, any> =>
+    te.tryCatch(
+      async () => {
+        const resp = await axios.get(
+          congressApiBillsUrl(congressApiKey)(offset)(limit)
+        );
+        return resp.data;
+      },
+      (err) => {
+        console.log(err);
+        return "Bills request failed";
+      }
+    );
+
+export const billRespToBillItems = (
+  billsResp: IBillsResp
+): IBillTweetQueueItem[] => billsResp.bills.map(billMetadataToBillItem);
+
+export const billRespToActions = (billsResp: IBillsResp): IAction[] =>
+  billsResp.bills.map(billMetadataToAction);
+
+const hasTweetBeenSent =
+  (tweetTable: string) =>
+  (ddb: DynamoDBClient) =>
+  async (bill: IBillTweetQueueItem): Promise<boolean> => {
+    const params: GetItemCommandInput = {
+      TableName: tweetTable,
+      Key: marshall({ id: bill.id }),
+    };
+
+    const command = new GetItemCommand(params);
+
+    const res = await ddb.send(command);
+    return !!res.Item;
+  };
+
+export const saveBillItems =
+  (tweetReceiptTable: string) =>
+  (billQueueItemTable: string) =>
+  (ddb: DynamoDBClient) =>
+  (billItems: IBillTweetQueueItem[]): TaskEither<string, string[]> =>
+    te.tryCatch(
+      async () => {
+        for (const bill of billItems) {
+          try {
+            const isSent = await hasTweetBeenSent(tweetReceiptTable)(ddb)(bill);
+
+            if (!isSent) {
+              const putParams: PutItemCommandInput = {
+                TableName: billQueueItemTable,
+                ConditionExpression: "attribute_not_exists(id)",
+                Item: marshall(bill),
+                ReturnValues: "NONE",
+              };
+
+              const putCommand = new PutItemCommand(putParams);
+              await ddb.send(putCommand);
+            }
+          } catch (err) {
+            console.log(err);
+            if (err?.code === "ConditionalCheckFailedException") throw err;
+          }
+        }
+
+        return billItems.map((item) => `${item.id}`);
+      },
+      (err) => {
+        console.log(err);
+        return "Bill save failed";
+      }
+    );
