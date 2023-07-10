@@ -431,6 +431,7 @@ export const saveBillItems =
   (billItems: IBillTweetQueueItem[]): TaskEither<string, string[]> =>
     te.tryCatch(
       async () => {
+        let res = [];
         for (const bill of billItems) {
           try {
             const isSent = await hasTweetBeenSent(tweetReceiptTable)(ddb)(bill);
@@ -445,6 +446,7 @@ export const saveBillItems =
 
               const putCommand = new PutItemCommand(putParams);
               await ddb.send(putCommand);
+              res.push(bill);
             }
           } catch (err) {
             console.log(err);
@@ -452,7 +454,7 @@ export const saveBillItems =
           }
         }
 
-        return billItems.map((item) => `${item.id}`);
+        return res.map((item) => `${item.id}`);
       },
       (err) => {
         console.log(err);
